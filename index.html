@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Con quién conversamos? - Visualizaciones Interactivas</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            height: 100vh;
+            background: white;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 40px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 1em;
+            opacity: 0.95;
+            max-width: 100%;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f7fafc;
+            border-bottom: 2px solid #e2e8f0;
+            overflow-x: auto;
+            flex-shrink: 0;
+            scrollbar-width: thin;
+            scrollbar-color: #667eea #f7fafc;
+        }
+
+        .tabs::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .tabs::-webkit-scrollbar-track {
+            background: #f7fafc;
+        }
+
+        .tabs::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 3px;
+        }
+
+        .tab {
+            flex: 1 1 auto;
+            min-width: 180px;
+            padding: 16px 24px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            color: #4a5568;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            background: #edf2f7;
+            color: #667eea;
+        }
+
+        .tab.active {
+            color: #667eea;
+            background: white;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+            width: 100%;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .tab-content.active {
+            display: flex;
+            flex-direction: column;
+        }
+
+        iframe {
+            width: 100%;
+            max-width: 1400px;
+            flex: 1;
+            border: none;
+            display: block;
+            overflow: auto;
+            margin: 0 auto;
+        }
+        
+        /* Contenedor del iframe para centrado */
+        .iframe-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            overflow: auto;
+            background: #f7fafc;
+            width: 100%;
+        }
+
+        .footer {
+            background: #f7fafc;
+            padding: 12px 20px;
+            text-align: center;
+            color: #718096;
+            font-size: 13px;
+            border-top: 1px solid #e2e8f0;
+            flex-shrink: 0;
+        }
+
+        .tab-description {
+            padding: 12px 20px;
+            background: #edf2f7;
+            border-left: 4px solid #667eea;
+            margin: 0;
+            font-size: 13px;
+            color: #4a5568;
+            line-height: 1.5;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 20px 15px;
+            }
+
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .header p {
+                font-size: 0.9em;
+            }
+
+            .tab {
+                min-width: 140px;
+                padding: 12px 16px;
+                font-size: 13px;
+            }
+
+            .tab-description {
+                padding: 10px 15px;
+                font-size: 12px;
+            }
+
+            .footer {
+                padding: 10px 15px;
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.3em;
+            }
+
+            .header p {
+                font-size: 0.85em;
+            }
+
+            .tab {
+                min-width: 120px;
+                padding: 10px 12px;
+                font-size: 12px;
+            }
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #667eea;
+            font-size: 18px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin-right: 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>¿Con quién conversamos?</h1>
+            <p>Análisis de patrones de interacción con LLM entre estudiantes universitarios de comunicación</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="openTab(event, 'heatmap')">
+                🔥 Heatmap Interactivo
+            </button>
+            <button class="tab" onclick="openTab(event, 'correlaciones')">
+                🔗 Matriz de Correlaciones
+            </button>
+            <button class="tab" onclick="openTab(event, 'radares')">
+                🎯 Radares de Perfiles
+            </button>
+            <button class="tab" onclick="openTab(event, 'scatter')">
+                📊 Scatter Plot D7 vs D2
+            </button>
+        </div>
+
+        <div id="heatmap" class="tab-content active">
+            <div class="tab-description">
+                <strong>Mapa de calor interactivo:</strong> Representación visual de las intensidades de las siete dimensiones analíticas a través de los participantes de la investigación.
+            </div>
+            <div class="iframe-container">
+                <iframe src="Heatmap_Interactivo.html" title="Heatmap Interactivo"></iframe>
+            </div>
+        </div>
+
+        <div id="correlaciones" class="tab-content">
+            <div class="tab-description">
+                <strong>Matriz de correlaciones:</strong> Análisis estadístico de las relaciones entre las siete dimensiones del estudio, con valores de correlación de Pearson y significancia estadística.
+            </div>
+            <div class="iframe-container">
+                <iframe src="Matriz_Correlaciones.html" title="Matriz de Correlaciones"></iframe>
+            </div>
+        </div>
+
+        <div id="radares" class="tab-content">
+            <div class="tab-description">
+                <strong>Perfiles en radar:</strong> Visualización comparativa de los perfiles individuales de participantes según las siete dimensiones de análisis de interacción humano-IA.
+            </div>
+            <div class="iframe-container">
+                <iframe src="Radares_Perfiles.html" title="Radares de Perfiles"></iframe>
+            </div>
+        </div>
+
+        <div id="scatter" class="tab-content">
+            <div class="tab-description">
+                <strong>Gráfico de dispersión:</strong> Visualización de la relación entre las dimensiones D7 (Rutina de Uso) y D2 (Humanización), mostrando patrones de interacción con citas textuales completas.
+            </div>
+            <div class="iframe-container">
+                <iframe src="ScatterPlot_D7_D2.html" title="Scatter Plot D7 vs D2"></iframe>
+            </div>
+        </div>
+
+        <div class="footer">
+            Investigación: "¿Con quién conversamos?" | Análisis de interacción humano-IA | 2024-2025
+        </div>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            // Ocultar todos los contenidos de tabs
+            var tabContents = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+
+            // Remover la clase active de todos los tabs
+            var tabs = document.getElementsByClassName("tab");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+
+            // Mostrar el contenido del tab actual y marcar el tab como activo
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Precarga los iframes cuando se hace clic en un tab por primera vez
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Visualizaciones cargadas correctamente');
+        });
+    </script>
+</body>
+</html>
