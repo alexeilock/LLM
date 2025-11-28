@@ -10,34 +10,33 @@
     CLUSTERING JERÁRQUICO
     - Método: Ward
     - Número de clusters: 4
-    - Coeficiente de Silueta: 0.217
+    - Coeficiente de Silueta: 0.203
     
     COMPOSICIÓN DE PERFILES:
     
-    Perfil 1: 7 participantes
-    DIEGO, EDUARDO C., EDUARDO S., MARTIN, NATALIA, PAMELA, SARA
+    Perfil 1: 6 participantes
+    ALBERTO, BRENDA, DIEGO, JESUS, JOAQUIN, MARIANA
 
-    Perfil 2: 2 participantes
-    ADRIAN, PIERO M.
+    Perfil 2: 6 participantes
+    CRISTINA, DIANA, ERIKA C., MICAELA, MILENA V., PIERO S.
 
     Perfil 3: 5 participantes
-    ALBERTO, BRENDA, JESUS, JOAQUIN, MARIANA
+    EDUARDO C., EDUARDO S., NATALIA, PAMELA, SARA
 
-    Perfil 4: 6 participantes
-    CRISTINA, DIANA, ERIKA C., MICAELA, MILENA V., PIERO S.
+    Perfil 4: 3 participantes
+    ADRIAN, MARTIN, PIERO M.
 
     
     ANÁLISIS DE HIPÓTESIS (D7-D2)
     - Hipótesis: A menor D7 (Comprensión) → Mayor D2 (Humanización)
-    - Correlación de Spearman: ρ = -0.175
-    - P-valor: 0.4614
+    - Correlación de Spearman: ρ = -0.232
+    - P-valor: 0.3240
     - Interpretación: No se confirma correlación negativa significativa
     
     OTRAS CORRELACIONES RELEVANTES:
-        D1 vs D2: ρ = 0.674 (p = 0.0011)
-    D2 vs D3: ρ = 0.452 (p = 0.0456)
-    D2 vs D4: ρ = 0.541 (p = 0.0139)
-    D2 vs D6: ρ = 0.457 (p = 0.0426)
+        D1 vs D2: ρ = 0.655 (p = 0.0017)
+    D2 vs D3: ρ = 0.509 (p = 0.0218)
+    D2 vs D4: ρ = 0.523 (p = 0.0180)
     D3 vs D7: ρ = -0.535 (p = 0.0150)
     D4 vs D6: ρ = 0.467 (p = 0.0377)
 
