@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfiles D2×D7 | ¿Con quién conversamos?</title>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <style>
+:root {
+    --color-bajo: #10B981;
+    --color-medio: #F59E0B;
+    --color-alto: #EF4444;
+    --color-na: #9CA3AF;
+    --color-no-valido: #6B7280;
+    --color-primario: #667EEA;
+    --color-secundario: #764BA2;
+    --color-fondo: #F7FAFC;
+    --color-texto: #1A202C;
+    --color-texto-claro: #718096;
+    --color-borde: #E2E8F0;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    line-height: 1.6;
+}
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+header {
+    background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+    color: white;
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+header h1 { font-size: 1.25rem; font-weight: 600; }
+nav ul { display: flex; list-style: none; gap: 0.5rem; flex-wrap: wrap; }
+nav a { color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.875rem; transition: background 0.2s; }
+nav a:hover, nav a.active { background: rgba(255,255,255,0.2); }
+
+main { padding: 2rem 0; min-height: calc(100vh - 200px); }
+
+.card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1.5rem; margin-bottom: 1.5rem; }
+.card h2 { font-size: 1.25rem; margin-bottom: 1rem; color: var(--color-primario); }
+
+.badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+.badge-bajo { background: var(--color-bajo); color: white; }
+.badge-medio { background: var(--color-medio); color: white; }
+.badge-alto { background: var(--color-alto); color: white; }
+.badge-na { background: var(--color-na); color: white; }
+.badge-no-valido { background: var(--color-no-valido); color: white; }
+
+.cita { background: #F8FAFC; border-left: 4px solid var(--color-primario); padding: 1rem 1.5rem; margin: 1rem 0; font-style: italic; border-radius: 0 8px 8px 0; }
+.cita-no-valido { background: #F3F4F6; border-left: 4px solid var(--color-no-valido); color: var(--color-no-valido); }
+.cita-autor { display: block; text-align: right; font-style: normal; font-weight: 600; color: var(--color-texto-claro); margin-top: 0.5rem; }
+
+.btn { display: inline-block; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.2s; border: none; font-size: 1rem; }
+.btn-primary { background: linear-gradient(135deg, var(--color-primario), var(--color-secundario)); color: white; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4); }
+.btn-secondary { background: white; color: var(--color-primario); border: 2px solid var(--color-primario); }
+.btn-secondary:hover { background: var(--color-primario); color: white; }
+
+.btn-video { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: #1a1a2e; color: white; border-radius: 6px; font-size: 0.875rem; font-weight: 500; cursor: pointer; border: none; transition: all 0.2s; margin-top: 0.75rem; }
+.btn-video:hover { background: #16213e; transform: scale(1.02); }
+.btn-video svg { width: 16px; height: 16px; }
+
+.grid { display: grid; gap: 1.5rem; }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 768px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    header .container { flex-direction: column; }
+    header h1 { font-size: 1rem; text-align: center; }
+    nav ul { justify-content: center; }
+    nav a { padding: 0.4rem 0.6rem; font-size: 0.75rem; }
+    .video-modal { width: 95%; border-radius: 8px; }
+    .video-modal-header { padding: 0.75rem 1rem; }
+    .video-modal-header h3 { font-size: 0.875rem; }
+    .video-modal-info { padding: 0.75rem 1rem; font-size: 0.75rem; }
+    .btn-video { padding: 0.6rem 1rem; font-size: 0.8rem; width: 100%; justify-content: center; }
+    .card { padding: 1rem; }
+    .card h2 { font-size: 1.1rem; }
+    h1 { font-size: 1.5rem; }
+    .tabs { gap: 0.25rem; }
+    .tab { padding: 0.5rem 0.75rem; font-size: 0.8rem; }
+}
+
+.panel-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 200; }
+.panel-overlay.active { opacity: 1; visibility: visible; }
+.panel { position: fixed; top: 0; right: -500px; width: 500px; max-width: 100%; height: 100%; background: white; box-shadow: -5px 0 20px rgba(0,0,0,0.1); transition: right 0.3s; z-index: 201; overflow-y: auto; }
+.panel.active { right: 0; }
+.panel-header { padding: 1.5rem; border-bottom: 1px solid var(--color-borde); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: white; }
+.panel-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--color-texto-claro); }
+.panel-content { padding: 1.5rem; }
+
+/* Modal de Video */
+.video-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 300; display: flex; align-items: center; justify-content: center; }
+.video-modal-overlay.active { opacity: 1; visibility: visible; }
+.video-modal { background: #1a1a2e; border-radius: 12px; width: 90%; max-width: 900px; overflow: hidden; transform: scale(0.9); transition: transform 0.3s; }
+.video-modal-overlay.active .video-modal { transform: scale(1); }
+.video-modal-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background: #16213e; color: white; }
+.video-modal-header h3 { font-size: 1rem; font-weight: 500; }
+.video-modal-close { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; opacity: 0.7; transition: opacity 0.2s; }
+.video-modal-close:hover { opacity: 1; }
+.video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; }
+.video-container iframe, .video-container #yt-player, .video-container video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+.video-modal-info { padding: 1rem 1.5rem; background: #0f0f23; color: #a0a0a0; font-size: 0.875rem; }
+
+footer { background: var(--color-texto); color: white; padding: 2rem 0; text-align: center; }
+
+.matriz-container { overflow-x: auto; }
+.matriz { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.matriz th, .matriz td { padding: 0.75rem; text-align: center; border: 1px solid var(--color-borde); }
+.matriz th { background: var(--color-primario); color: white; font-weight: 600; }
+.matriz td.participante { text-align: left; font-weight: 600; background: #F8FAFC; }
+.matriz td.celda { cursor: pointer; transition: transform 0.2s; }
+.matriz td.celda:hover { transform: scale(1.1); box-shadow: 0 0 10px rgba(0,0,0,0.2); z-index: 10; position: relative; }
+.celda-valor { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 6px; color: white; font-weight: 600; }
+
+.tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.tab { padding: 0.75rem 1.5rem; background: white; border: 2px solid var(--color-borde); border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+.tab:hover { border-color: var(--color-primario); }
+.tab.active { background: var(--color-primario); color: white; border-color: var(--color-primario); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.filtros { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center; }
+.filtro-grupo { display: flex; align-items: center; gap: 0.5rem; }
+.filtro-grupo label { font-weight: 600; font-size: 0.875rem; }
+.filtro-grupo select { padding: 0.5rem 1rem; border: 2px solid var(--color-borde); border-radius: 6px; font-size: 0.875rem; }
+.busqueda { flex: 1; min-width: 200px; }
+.busqueda input { width: 100%; padding: 0.75rem 1rem; border: 2px solid var(--color-borde); border-radius: 8px; font-size: 1rem; }
+.busqueda input:focus { outline: none; border-color: var(--color-primario); }
+
+.accordion-item { border: 1px solid var(--color-borde); border-radius: 8px; margin-bottom: 0.5rem; overflow: hidden; }
+.accordion-header { padding: 1rem 1.5rem; background: white; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
+.accordion-header:hover { background: #F8FAFC; }
+.accordion-icon { transition: transform 0.3s; }
+.accordion-item.active .accordion-icon { transform: rotate(180deg); }
+.accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s; }
+.accordion-item.active .accordion-content { max-height: 2000px; }
+.accordion-body { padding: 1.5rem; border-top: 1px solid var(--color-borde); }
+
+.stat-card { text-align: center; padding: 1.5rem; }
+.stat-numero { font-size: 3rem; font-weight: 700; color: var(--color-primario); line-height: 1; }
+.stat-label { font-size: 0.875rem; color: var(--color-texto-claro); margin-top: 0.5rem; }
+
+.progress-bar { height: 8px; background: var(--color-borde); border-radius: 4px; overflow: hidden; margin: 0.5rem 0; }
+.progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+</style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>¿Con quién conversamos?</h1>
+            <nav><ul><li><a href="index.html" class="">Inicio</a></li>
+<li><a href="01_matriz.html" class="">Matriz</a></li>
+<li><a href="02_dimensiones.html" class="">Dimensiones</a></li>
+<li><a href="03_voces.html" class="">Voces</a></li>
+<li><a href="04_perfiles.html" class="active">Perfiles D2×D7</a></li>
+<li><a href="05_hallazgo.html" class="">Hallazgo</a></li>
+<li><a href="06_metodologia.html" class="">Metodología</a></li>
+</ul></nav>
+        </div>
+    </header>
+    
+    <main><div class="container">
+    <h1 style="margin-bottom: 0.5rem;">Perfiles D2×D7</h1>
+    <p style="color: var(--color-texto-claro); margin-bottom: 2rem;">5 tipos de usuarios del cruce Humanización × Comprensión Técnica.</p>
+    <div class="card"><h2>Mapa de Tipos</h2>
+    <table style="width:100%;border-collapse:collapse;text-align:center;margin:1rem 0;">
+        <tr><td></td><td colspan="3" style="font-weight:600;padding:0.5rem;">D7 (Comprensión Técnica)</td></tr>
+        <tr><td></td><td style="padding:0.5rem;">BAJO</td><td>MEDIO</td><td>ALTO</td></tr>
+        <tr><td style="font-weight:600;">D2=ALTO</td>
+            <td style="background:#FED7D7;padding:1rem;border-radius:8px;">🔴 Humanizadores</td>
+            <td style="background:#BEE3F8;padding:1rem;border-radius:8px;">🔵 Híbrido</td>
+            <td style="background:#E2E8F0;padding:1rem;color:#718096;">-</td></tr>
+        <tr><td style="font-weight:600;">D2=MEDIO</td>
+            <td style="background:#FEEBC8;padding:1rem;border-radius:8px;">🟠 Pragmáticos</td>
+            <td style="background:#E2E8F0;padding:1rem;color:#718096;">-</td>
+            <td style="background:#C6F6D5;padding:1rem;border-radius:8px;">🟢 Técnicos</td></tr>
+        <tr><td style="font-weight:600;">D2=BAJO</td>
+            <td style="background:#E2E8F0;padding:1rem;border-radius:8px;">⚫ Escépticos</td>
+            <td style="background:#E2E8F0;padding:1rem;color:#718096;">-</td>
+            <td style="background:#C6F6D5;padding:1rem;border-radius:8px;">🟢 Técnicos</td></tr>
+    </table>
+    </div>
+    <div class="card"><h2>Detalle por Tipo</h2>
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <span><span style="display:inline-block;width:12px;height:12px;background:#E53E3E;border-radius:50%;margin-right:0.5rem;"></span>
+                <strong>Humanizadores Intuitivos</strong> <span style="color:var(--color-texto-claro);">45% (n=9)</span></span>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content"><div class="accordion-body">
+                <p><strong>Criterio:</strong> D2: ALTO | D7: BAJO</p>
+                <p style="margin: 0.5rem 0;">Alta humanización sin base técnica. La interfaz activa esquemas relacionales.</p>
+                <p><strong>Participantes:</strong> ALBERTO, BRENDA, DIANA, DIEGO, JESUS, MARIANA, MICAELA, PIERO M., SARA</p>
+                
+            <div style="margin-top: 1rem; padding: 1rem; background: #F8FAFC; border-radius: 8px;">
+                <p style="font-weight: 600;">💬 ALBERTO:</p>
+                <div style="max-height: 80px; overflow-y: auto; margin: 0.5rem 0; padding-right: 0.5rem;">
+                    <p style="font-size: 0.875rem; margin-bottom: 0.5rem;"><strong>D7:</strong> "Yo creo que es un conjunto de servidores interconectados a la red que en base a una lectura muy amplia de interacciones en línea que ya están subidas al internet, o sea, analiza cómo interactúa la gente y analiza la información que pone en contraste, De ahí surge la respuesta que te puede dar, ¿no? ... las respuestas salen de la interacción con la gente también."</p>
+                    <p style="font-size: 0.875rem;"><strong>D2:</strong> "Eh, no, lo siento cercano, lo siento cercano. No, no es como si un bot me estaría tirando información, ¿no? ... me he dado cuenta que cuando al final añado un por favor se vuelve mucho más cercano... A nivel emocional que sentí, calidez, compañerismo, aunque sea una idea, sentí mucho compañerismo."</p>
+                </div>
+            </div>
+            </div></div>
+        </div>
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <span><span style="display:inline-block;width:12px;height:12px;background:#DD6B20;border-radius:50%;margin-right:0.5rem;"></span>
+                <strong>Pragmáticos Distantes</strong> <span style="color:var(--color-texto-claro);">30% (n=6)</span></span>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content"><div class="accordion-body">
+                <p><strong>Criterio:</strong> D2: MEDIO | D7: BAJO</p>
+                <p style="margin: 0.5rem 0;">Humanización moderada, uso funcional. Atribuyen 'calidez' al diseño.</p>
+                <p><strong>Participantes:</strong> EDUARDO C., ERIKA, JOAQUIN, MILENA, NATALIA, PAMELA</p>
+                
+            <div style="margin-top: 1rem; padding: 1rem; background: #F8FAFC; border-radius: 8px;">
+                <p style="font-weight: 600;">💬 EDUARDO C.:</p>
+                <div style="max-height: 80px; overflow-y: auto; margin: 0.5rem 0; padding-right: 0.5rem;">
+                    <p style="font-size: 0.875rem; margin-bottom: 0.5rem;"><strong>D7:</strong> "tiene una base de datos que en base a algoritmos... los utiliza para generar respuestas que recopila de información de todo el Internet. O sea, por eso es que nada de lo que te dice es algo nuevo. Nada de lo que te dice es algo innovador porque ya existe en alguna parte o es algo que ya está escrito. ... Recopila lo que te está diciendo y a partir de eso genera una búsqueda rápida y te lo sintetiza en un modelo de lenguaje ya programado."</p>
+                    <p style="font-size: 0.875rem;"><strong>D2:</strong> "Me pareció que era algo... o sea, era como si estuvieras hablando con un profesor o alguien que te asesore.... con un lenguaje un poco más coloquial.... Como está programado para hacerse sentir una persona o alguien un poco más cercano a ti.... se puede sentir un poco familiar o más cercano de lo normal. Yo no lo siento como un robot en sí.... Pero eso ya está programado.... No me causa ninguna sensación muy fuerte, simplemente como una cordialidad, como un correo que te llega."</p>
+                </div>
+            </div>
+            </div></div>
+        </div>
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <span><span style="display:inline-block;width:12px;height:12px;background:#718096;border-radius:50%;margin-right:0.5rem;"></span>
+                <strong>Escépticos Consistentes</strong> <span style="color:var(--color-texto-claro);">10% (n=2)</span></span>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content"><div class="accordion-body">
+                <p><strong>Criterio:</strong> D2: BAJO | D7: BAJO</p>
+                <p style="margin: 0.5rem 0;">Baja humanización SIN base técnica. Distancia por factores disposicionales.</p>
+                <p><strong>Participantes:</strong> CRISTINA, EDUARDO S.</p>
+                
+            <div style="margin-top: 1rem; padding: 1rem; background: #F8FAFC; border-radius: 8px;">
+                <p style="font-weight: 600;">💬 CRISTINA:</p>
+                <div style="max-height: 80px; overflow-y: auto; margin: 0.5rem 0; padding-right: 0.5rem;">
+                    <p style="font-size: 0.875rem; margin-bottom: 0.5rem;"><strong>D7:</strong> "Lo que yo sé es que se alimenta de la información que la gente le brinda, ¿no? Entonces, conforme la gente lo usa más, sabe más. Eso es lo que yo entiendo."."</p>
+                    <p style="font-size: 0.875rem;"><strong>D2:</strong> "Creo que ahorita estoy en un momento donde sí lo veo más como un objeto pero creo que en especial cuando lo uso como por entretenimiento si me genera muchos sentimientos como de estoy hablando como una persona.... Yo lo siento... Ahora que lo pienso más era más como un diario en realidad. Porque no... Realmente no lo escuchaba.... Volvía a sentirme como consciente al respecto de que era una máquina.",,."</p>
+                </div>
+            </div>
+            </div></div>
+        </div>
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <span><span style="display:inline-block;width:12px;height:12px;background:#38A169;border-radius:50%;margin-right:0.5rem;"></span>
+                <strong>Técnicos Reflexivos</strong> <span style="color:var(--color-texto-claro);">10% (n=2)</span></span>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content"><div class="accordion-body">
+                <p><strong>Criterio:</strong> D2: BAJO-MEDIO | D7: ALTO</p>
+                <p style="margin: 0.5rem 0;">Comprensión técnica sofisticada. Humanización mitigada pero NO eliminada.</p>
+                <p><strong>Participantes:</strong> ADRIAN, MARTIN</p>
+                
+            <div style="margin-top: 1rem; padding: 1rem; background: #F8FAFC; border-radius: 8px;">
+                <p style="font-weight: 600;">💬 ADRIAN:</p>
+                <div style="max-height: 80px; overflow-y: auto; margin: 0.5rem 0; padding-right: 0.5rem;">
+                    <p style="font-size: 0.875rem; margin-bottom: 0.5rem;"><strong>D7:</strong> "traduce tus palabras en tokens.... trata de adivinar, porque básicamente hay mucho como de adivinar qué hace la computadora o predecir.... el modelo toma sus propios criterios para tratar de adivinar cuál es la mejor respuesta.... el texto también es como una especie de predicción de qué, o sea, de la misma forma en que decodifica tu texto, de la misma forma te lo arma. Entonces, también, adivina qué palabras son las mejores para utilizar en cada situación.",,,"</p>
+                    <p style="font-size: 0.875rem;"><strong>D2:</strong> "yo personalmente sé que yo lo puedo personalizar como quiero, entonces yo lo utilizo, o sea, yo lo siento como asistente que se adapta a lo que necesitas.... diría que es lo más neutral. En general es bien neutral, pero de ahí también se va adaptando a cómo tú le hablas.",,"</p>
+                </div>
+            </div>
+            </div></div>
+        </div>
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <span><span style="display:inline-block;width:12px;height:12px;background:#3182CE;border-radius:50%;margin-right:0.5rem;"></span>
+                <strong>Híbrido Informado</strong> <span style="color:var(--color-texto-claro);">5% (n=1)</span></span>
+                <span class="accordion-icon">▼</span>
+            </div>
+            <div class="accordion-content"><div class="accordion-body">
+                <p><strong>Criterio:</strong> D2: ALTO | D7: MEDIO</p>
+                <p style="margin: 0.5rem 0;">Conocimiento parcial con humanización intensa. Máxima disociación.</p>
+                <p><strong>Participantes:</strong> PIERO S.</p>
+                
+            <div style="margin-top: 1rem; padding: 1rem; background: #F8FAFC; border-radius: 8px;">
+                <p style="font-weight: 600;">💬 PIERO S.:</p>
+                <div style="max-height: 80px; overflow-y: auto; margin: 0.5rem 0; padding-right: 0.5rem;">
+                    <p style="font-size: 0.875rem; margin-bottom: 0.5rem;"><strong>D7:</strong> "Sé los principios básicos... que vendría a ser el reconocimiento de patrones en base a el tipo de respuesta que tú estás pidiendo.... la segmentación en dos tipos de patrones, que eran la búsqueda que ellos tenían, o sea, el modelo de inteligencia artificial y el historial que ya tenía en base a los chats anteriores. Esa fusión de dos tipos de patrones lo unía y en base a la similitud que tenían estos era la respuesta que te daba"</p>
+                    <p style="font-size: 0.875rem;"><strong>D2:</strong> "Sí, tuve una que solo lo realicé una vez... en la cual te haga una review de qué tipo de comportamiento y qué tipo de persona eres en base al historial de búsqueda que tú tienes.... la respuesta que dio... me dio un feedback entero de todas las conversaciones que había tenido durante casi dos años, y fue bastante personal, fue como si hubiera hablado con mi terapeuta incluso.... me pareció muy extraño que un tipo de inteligencia artificial pueda acostumbrarse a tu nivel de lenguaje y a lo que te gusta escuchar como si fuera una persona"</p>
+                </div>
+            </div>
+            </div></div>
+        </div></div>
+    <div style="margin-top: 2rem; text-align: center;"><a href="05_hallazgo.html" class="btn btn-primary">Ver el hallazgo central →</a></div>
+    </div></main>
+    
+    <div id="panel-overlay" class="panel-overlay"></div>
+    <div id="panel" class="panel">
+        <div class="panel-header">
+            <h3>Detalle</h3>
+            <button class="panel-close" onclick="cerrarPanel()">✕</button>
+        </div>
+        <div id="panel-content" class="panel-content"></div>
+    </div>
+    
+    <!-- Modal de Video -->
+    <div id="video-modal-overlay" class="video-modal-overlay">
+        <div class="video-modal">
+            <div class="video-modal-header">
+                <h3>Video de la Entrevista</h3>
+                <button class="video-modal-close" onclick="cerrarVideo()">✕</button>
+            </div>
+            <div id="video-container" class="video-container"></div>
+            <div id="video-info" class="video-modal-info"></div>
+        </div>
+    </div>
+    
+    <footer><div class="container"><p>Estudio cualitativo · "¿Con quién conversamos?" · 2024-2025</p></div></footer>
+    
+    <script>
+function abrirPanel(contenido) {
+    document.getElementById('panel-overlay').classList.add('active');
+    document.getElementById('panel').classList.add('active');
+    document.getElementById('panel-content').innerHTML = contenido;
+    document.body.style.overflow = 'hidden';
+}
+
+function cerrarPanel() {
+    document.getElementById('panel-overlay').classList.remove('active');
+    document.getElementById('panel').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var overlay = document.getElementById('panel-overlay');
+    if (overlay) overlay.addEventListener('click', cerrarPanel);
+});
+
+function cambiarTab(tabId, grupo) {
+    document.querySelectorAll('[data-tab-grupo="'+grupo+'"]').forEach(function(tab) { tab.classList.remove('active'); });
+    document.querySelectorAll('[data-content-grupo="'+grupo+'"]').forEach(function(content) { content.classList.remove('active'); });
+    document.querySelector('[data-tab-id="'+tabId+'"]').classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+}
+
+function toggleAccordion(element) {
+    element.closest('.accordion-item').classList.toggle('active');
+}
+
+function aplicarFiltros() {
+    var filtros = {};
+    document.querySelectorAll('.filtro-select').forEach(function(select) {
+        filtros[select.dataset.filtro] = select.value;
+    });
+    var busquedaEl = document.querySelector('.filtro-busqueda');
+    var busqueda = busquedaEl ? busquedaEl.value.toLowerCase() : '';
+    
+    document.querySelectorAll('.item-filtrable').forEach(function(item) {
+        var visible = true;
+        for (var key in filtros) {
+            if (filtros[key] && item.dataset[key] !== filtros[key]) {
+                visible = false;
+                break;
+            }
+        }
+        if (visible && busqueda) {
+            if (item.textContent.toLowerCase().indexOf(busqueda) === -1) {
+                visible = false;
+            }
+        }
+        item.style.display = visible ? '' : 'none';
+    });
+    
+    var contador = document.getElementById('contador-filtro');
+    if (contador) {
+        var visibles = document.querySelectorAll('.item-filtrable:not([style*="display: none"])').length;
+        contador.textContent = visibles;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.filtro-select').forEach(function(select) {
+        select.addEventListener('change', aplicarFiltros);
+    });
+    var busqueda = document.querySelector('.filtro-busqueda');
+    if (busqueda) busqueda.addEventListener('input', aplicarFiltros);
+});
+
+// Funciones para Modal de Video (soporta videos locales y YouTube)
+var ytPlayer = null;
+var ytCheckInterval = null;
+
+function onYouTubeIframeAPIReady() {
+    // API lista
+}
+
+function abrirVideo(videoData, participante, dimension) {
+    if (!videoData || videoData === '') {
+        alert('Video no disponible para esta cita.');
+        return;
+    }
+    
+    var modal = document.getElementById('video-modal-overlay');
+    var container = document.getElementById('video-container');
+    var info = document.getElementById('video-info');
+    
+    info.textContent = participante + ' — ' + dimension;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // Detectar tipo de video
+    if (videoData.endsWith('.mp4')) {
+        // Video local
+        container.innerHTML = '<video id="local-player" controls autoplay style="width:100%;height:100%;background:#000;">' +
+            '<source src="videos/' + videoData + '" type="video/mp4">' +
+            'Tu navegador no soporta video HTML5.</video>';
+    } else {
+        // YouTube
+        container.innerHTML = '<div id="yt-player"></div>';
+        ytPlayer = new YT.Player('yt-player', {
+            videoId: videoData,
+            playerVars: {
+                autoplay: 1,
+                rel: 0,
+                modestbranding: 1,
+                showinfo: 0,
+                iv_load_policy: 3,
+                controls: 1,
+                fs: 1,
+                disablekb: 0
+            },
+            events: {
+                onReady: function(event) {
+                    event.target.playVideo();
+                    iniciarCheckFinal();
+                },
+                onStateChange: function(event) {
+                    if (event.data === YT.PlayerState.ENDED) {
+                        event.target.seekTo(event.target.getDuration() - 0.1);
+                        event.target.pauseVideo();
+                    }
+                }
+            }
+        });
+    }
+}
+
+function iniciarCheckFinal() {
+    if (ytCheckInterval) clearInterval(ytCheckInterval);
+    ytCheckInterval = setInterval(function() {
+        if (ytPlayer && ytPlayer.getCurrentTime && ytPlayer.getDuration) {
+            var current = ytPlayer.getCurrentTime();
+            var duration = ytPlayer.getDuration();
+            if (duration > 0 && current >= duration - 0.5) {
+                ytPlayer.pauseVideo();
+                clearInterval(ytCheckInterval);
+            }
+        }
+    }, 200);
+}
+
+function cerrarVideo() {
+    var modal = document.getElementById('video-modal-overlay');
+    var container = document.getElementById('video-container');
+    
+    // Pausar video local si existe
+    var localPlayer = document.getElementById('local-player');
+    if (localPlayer) {
+        localPlayer.pause();
+    }
+    
+    // Limpiar YouTube
+    if (ytCheckInterval) {
+        clearInterval(ytCheckInterval);
+        ytCheckInterval = null;
+    }
+    if (ytPlayer) {
+        ytPlayer.destroy();
+        ytPlayer = null;
+    }
+    
+    container.innerHTML = '';
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var videoOverlay = document.getElementById('video-modal-overlay');
+    if (videoOverlay) {
+        videoOverlay.addEventListener('click', function(e) {
+            if (e.target === videoOverlay) {
+                cerrarVideo();
+            }
+        });
+    }
+    
+    // Cerrar con Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            cerrarVideo();
+            cerrarPanel();
+        }
+    });
+});
+</script>
+</body>
+</html>

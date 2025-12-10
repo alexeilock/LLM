@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matriz de Participantes | ¿Con quién conversamos?</title>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <style>
+:root {
+    --color-bajo: #10B981;
+    --color-medio: #F59E0B;
+    --color-alto: #EF4444;
+    --color-na: #9CA3AF;
+    --color-no-valido: #6B7280;
+    --color-primario: #667EEA;
+    --color-secundario: #764BA2;
+    --color-fondo: #F7FAFC;
+    --color-texto: #1A202C;
+    --color-texto-claro: #718096;
+    --color-borde: #E2E8F0;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background-color: var(--color-fondo);
+    color: var(--color-texto);
+    line-height: 1.6;
+}
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+header {
+    background: linear-gradient(135deg, var(--color-primario), var(--color-secundario));
+    color: white;
+    padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+header .container { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+header h1 { font-size: 1.25rem; font-weight: 600; }
+nav ul { display: flex; list-style: none; gap: 0.5rem; flex-wrap: wrap; }
+nav a { color: white; text-decoration: none; padding: 0.5rem 1rem; border-radius: 6px; font-size: 0.875rem; transition: background 0.2s; }
+nav a:hover, nav a.active { background: rgba(255,255,255,0.2); }
+
+main { padding: 2rem 0; min-height: calc(100vh - 200px); }
+
+.card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1.5rem; margin-bottom: 1.5rem; }
+.card h2 { font-size: 1.25rem; margin-bottom: 1rem; color: var(--color-primario); }
+
+.badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; }
+.badge-bajo { background: var(--color-bajo); color: white; }
+.badge-medio { background: var(--color-medio); color: white; }
+.badge-alto { background: var(--color-alto); color: white; }
+.badge-na { background: var(--color-na); color: white; }
+.badge-no-valido { background: var(--color-no-valido); color: white; }
+
+.cita { background: #F8FAFC; border-left: 4px solid var(--color-primario); padding: 1rem 1.5rem; margin: 1rem 0; font-style: italic; border-radius: 0 8px 8px 0; }
+.cita-no-valido { background: #F3F4F6; border-left: 4px solid var(--color-no-valido); color: var(--color-no-valido); }
+.cita-autor { display: block; text-align: right; font-style: normal; font-weight: 600; color: var(--color-texto-claro); margin-top: 0.5rem; }
+
+.btn { display: inline-block; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.2s; border: none; font-size: 1rem; }
+.btn-primary { background: linear-gradient(135deg, var(--color-primario), var(--color-secundario)); color: white; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4); }
+.btn-secondary { background: white; color: var(--color-primario); border: 2px solid var(--color-primario); }
+.btn-secondary:hover { background: var(--color-primario); color: white; }
+
+.btn-video { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: #1a1a2e; color: white; border-radius: 6px; font-size: 0.875rem; font-weight: 500; cursor: pointer; border: none; transition: all 0.2s; margin-top: 0.75rem; }
+.btn-video:hover { background: #16213e; transform: scale(1.02); }
+.btn-video svg { width: 16px; height: 16px; }
+
+.grid { display: grid; gap: 1.5rem; }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 768px) {
+    .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+    header .container { flex-direction: column; }
+    header h1 { font-size: 1rem; text-align: center; }
+    nav ul { justify-content: center; }
+    nav a { padding: 0.4rem 0.6rem; font-size: 0.75rem; }
+    .video-modal { width: 95%; border-radius: 8px; }
+    .video-modal-header { padding: 0.75rem 1rem; }
+    .video-modal-header h3 { font-size: 0.875rem; }
+    .video-modal-info { padding: 0.75rem 1rem; font-size: 0.75rem; }
+    .btn-video { padding: 0.6rem 1rem; font-size: 0.8rem; width: 100%; justify-content: center; }
+    .card { padding: 1rem; }
+    .card h2 { font-size: 1.1rem; }
+    h1 { font-size: 1.5rem; }
+    .tabs { gap: 0.25rem; }
+    .tab { padding: 0.5rem 0.75rem; font-size: 0.8rem; }
+}
+
+.panel-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 200; }
+.panel-overlay.active { opacity: 1; visibility: visible; }
+.panel { position: fixed; top: 0; right: -500px; width: 500px; max-width: 100%; height: 100%; background: white; box-shadow: -5px 0 20px rgba(0,0,0,0.1); transition: right 0.3s; z-index: 201; overflow-y: auto; }
+.panel.active { right: 0; }
+.panel-header { padding: 1.5rem; border-bottom: 1px solid var(--color-borde); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: white; }
+.panel-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--color-texto-claro); }
+.panel-content { padding: 1.5rem; }
+
+/* Modal de Video */
+.video-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); opacity: 0; visibility: hidden; transition: all 0.3s; z-index: 300; display: flex; align-items: center; justify-content: center; }
+.video-modal-overlay.active { opacity: 1; visibility: visible; }
+.video-modal { background: #1a1a2e; border-radius: 12px; width: 90%; max-width: 900px; overflow: hidden; transform: scale(0.9); transition: transform 0.3s; }
+.video-modal-overlay.active .video-modal { transform: scale(1); }
+.video-modal-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background: #16213e; color: white; }
+.video-modal-header h3 { font-size: 1rem; font-weight: 500; }
+.video-modal-close { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; opacity: 0.7; transition: opacity 0.2s; }
+.video-modal-close:hover { opacity: 1; }
+.video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; }
+.video-container iframe, .video-container #yt-player, .video-container video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+.video-modal-info { padding: 1rem 1.5rem; background: #0f0f23; color: #a0a0a0; font-size: 0.875rem; }
+
+footer { background: var(--color-texto); color: white; padding: 2rem 0; text-align: center; }
+
+.matriz-container { overflow-x: auto; }
+.matriz { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.matriz th, .matriz td { padding: 0.75rem; text-align: center; border: 1px solid var(--color-borde); }
+.matriz th { background: var(--color-primario); color: white; font-weight: 600; }
+.matriz td.participante { text-align: left; font-weight: 600; background: #F8FAFC; }
+.matriz td.celda { cursor: pointer; transition: transform 0.2s; }
+.matriz td.celda:hover { transform: scale(1.1); box-shadow: 0 0 10px rgba(0,0,0,0.2); z-index: 10; position: relative; }
+.celda-valor { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 6px; color: white; font-weight: 600; }
+
+.tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.tab { padding: 0.75rem 1.5rem; background: white; border: 2px solid var(--color-borde); border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+.tab:hover { border-color: var(--color-primario); }
+.tab.active { background: var(--color-primario); color: white; border-color: var(--color-primario); }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.filtros { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center; }
+.filtro-grupo { display: flex; align-items: center; gap: 0.5rem; }
+.filtro-grupo label { font-weight: 600; font-size: 0.875rem; }
+.filtro-grupo select { padding: 0.5rem 1rem; border: 2px solid var(--color-borde); border-radius: 6px; font-size: 0.875rem; }
+.busqueda { flex: 1; min-width: 200px; }
+.busqueda input { width: 100%; padding: 0.75rem 1rem; border: 2px solid var(--color-borde); border-radius: 8px; font-size: 1rem; }
+.busqueda input:focus { outline: none; border-color: var(--color-primario); }
+
+.accordion-item { border: 1px solid var(--color-borde); border-radius: 8px; margin-bottom: 0.5rem; overflow: hidden; }
+.accordion-header { padding: 1rem 1.5rem; background: white; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
+.accordion-header:hover { background: #F8FAFC; }
+.accordion-icon { transition: transform 0.3s; }
+.accordion-item.active .accordion-icon { transform: rotate(180deg); }
+.accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s; }
+.accordion-item.active .accordion-content { max-height: 2000px; }
+.accordion-body { padding: 1.5rem; border-top: 1px solid var(--color-borde); }
+
+.stat-card { text-align: center; padding: 1.5rem; }
+.stat-numero { font-size: 3rem; font-weight: 700; color: var(--color-primario); line-height: 1; }
+.stat-label { font-size: 0.875rem; color: var(--color-texto-claro); margin-top: 0.5rem; }
+
+.progress-bar { height: 8px; background: var(--color-borde); border-radius: 4px; overflow: hidden; margin: 0.5rem 0; }
+.progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+</style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>¿Con quién conversamos?</h1>
+            <nav><ul><li><a href="index.html" class="">Inicio</a></li>
+<li><a href="01_matriz.html" class="active">Matriz</a></li>
+<li><a href="02_dimensiones.html" class="">Dimensiones</a></li>
+<li><a href="03_voces.html" class="">Voces</a></li>
+<li><a href="04_perfiles.html" class="">Perfiles D2×D7</a></li>
+<li><a href="05_hallazgo.html" class="">Hallazgo</a></li>
+<li><a href="06_metodologia.html" class="">Metodología</a></li>
+</ul></nav>
+        </div>
+    </header>
+    
+    <main><div class="container">
+    <h1 style="margin-bottom: 0.5rem;">Matriz de Participantes</h1>
+    <p style="color: var(--color-texto-claro); margin-bottom: 2rem;">
+        20 participantes × 7 dimensiones. Click en cualquier celda para ver la cita textual.
+    </p>
+    
+    <div class="card">
+        <div class="matriz-container">
+            <table class="matriz">
+                <thead>
+                    <tr>
+                        <th>Participante</th>
+                        <th title="Rutinas de Interacción">D1</th>
+                        <th title="Humanización del Modelo">D2</th>
+                        <th title="Pensamiento Extendido">D3</th>
+                        <th title="Lógica Diferente">D4</th>
+                        <th title="Oráculo">D5</th>
+                        <th title="Info. Emergente">D6</th>
+                        <th title="Comprensión Técnica">D7</th>
+                    </tr>
+                </thead>
+                <tbody><tr><td class="participante">ADRIAN</td><td class="celda" onclick="mostrarCita('ADRIAN', 'D1')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('ADRIAN', 'D2')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td><td class="celda" onclick="mostrarCita('ADRIAN', 'D3')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('ADRIAN', 'D4')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('ADRIAN', 'D5')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td><td class="celda" onclick="mostrarCita('ADRIAN', 'D6')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('ADRIAN', 'D7')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td></tr><tr><td class="participante">ALBERTO</td><td class="celda" onclick="mostrarCita('ALBERTO', 'D1')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('ALBERTO', 'D2')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('ALBERTO', 'D3')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('ALBERTO', 'D4')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('ALBERTO', 'D5')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('ALBERTO', 'D6')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('ALBERTO', 'D7')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td></tr><tr><td class="participante">BRENDA</td><td class="celda" onclick="mostrarCita('BRENDA', 'D1')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('BRENDA', 'D2')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('BRENDA', 'D3')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('BRENDA', 'D4')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('BRENDA', 'D5')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td><td class="celda" onclick="mostrarCita('BRENDA', 'D6')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('BRENDA', 'D7')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td></tr><tr><td class="participante">CRISTINA</td><td class="celda" onclick="mostrarCita('CRISTINA', 'D1')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td><td class="celda" onclick="mostrarCita('CRISTINA', 'D2')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td><td class="celda" onclick="mostrarCita('CRISTINA', 'D3')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('CRISTINA', 'D4')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('CRISTINA', 'D5')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td><td class="celda" onclick="mostrarCita('CRISTINA', 'D6')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('CRISTINA', 'D7')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td></tr><tr><td class="participante">DIANA</td><td class="celda" onclick="mostrarCita('DIANA', 'D1')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('DIANA', 'D2')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('DIANA', 'D3')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('DIANA', 'D4')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('DIANA', 'D5')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('DIANA', 'D6')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('DIANA', 'D7')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td></tr><tr><td class="participante">DIEGO</td><td class="celda" onclick="mostrarCita('DIEGO', 'D1')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('DIEGO', 'D2')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('DIEGO', 'D3')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('DIEGO', 'D4')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('DIEGO', 'D5')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('DIEGO', 'D6')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('DIEGO', 'D7')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td></tr><tr><td class="participante">EDUARDO C.</td><td class="celda" onclick="mostrarCita('EDUARDO C.', 'D1')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('EDUARDO C.', 'D2')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('EDUARDO C.', 'D3')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('EDUARDO C.', 'D4')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('EDUARDO C.', 'D5')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td><td class="celda" onclick="mostrarCita('EDUARDO C.', 'D6')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('EDUARDO C.', 'D7')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td></tr><tr><td class="participante">EDUARDO S.</td><td class="celda" onclick="mostrarCita('EDUARDO S.', 'D1')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('EDUARDO S.', 'D2')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td><td class="celda" onclick="mostrarCita('EDUARDO S.', 'D3')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('EDUARDO S.', 'D4')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('EDUARDO S.', 'D5')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('EDUARDO S.', 'D6')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td><td class="celda" onclick="mostrarCita('EDUARDO S.', 'D7')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td></tr><tr><td class="participante">ERIKA</td><td class="celda" onclick="mostrarCita('ERIKA', 'D1')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('ERIKA', 'D2')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('ERIKA', 'D3')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('ERIKA', 'D4')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('ERIKA', 'D5')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td><td class="celda" onclick="mostrarCita('ERIKA', 'D6')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('ERIKA', 'D7')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td></tr><tr><td class="participante">JESUS</td><td class="celda" onclick="mostrarCita('JESUS', 'D1')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('JESUS', 'D2')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('JESUS', 'D3')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('JESUS', 'D4')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('JESUS', 'D5')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('JESUS', 'D6')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('JESUS', 'D7')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td></tr><tr><td class="participante">JOAQUIN</td><td class="celda" onclick="mostrarCita('JOAQUIN', 'D1')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('JOAQUIN', 'D2')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('JOAQUIN', 'D3')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('JOAQUIN', 'D4')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('JOAQUIN', 'D5')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td><td class="celda" onclick="mostrarCita('JOAQUIN', 'D6')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('JOAQUIN', 'D7')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td></tr><tr><td class="participante">MARIANA</td><td class="celda" onclick="mostrarCita('MARIANA', 'D1')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('MARIANA', 'D2')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('MARIANA', 'D3')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('MARIANA', 'D4')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('MARIANA', 'D5')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('MARIANA', 'D6')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('MARIANA', 'D7')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td></tr><tr><td class="participante">MARTIN</td><td class="celda" onclick="mostrarCita('MARTIN', 'D1')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td><td class="celda" onclick="mostrarCita('MARTIN', 'D2')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('MARTIN', 'D3')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('MARTIN', 'D4')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('MARTIN', 'D5')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td><td class="celda" onclick="mostrarCita('MARTIN', 'D6')">
+                <span class="celda-valor" style="background: #6B7280">N/A</span>
+            </td><td class="celda" onclick="mostrarCita('MARTIN', 'D7')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td></tr><tr><td class="participante">MICAELA</td><td class="celda" onclick="mostrarCita('MICAELA', 'D1')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('MICAELA', 'D2')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('MICAELA', 'D3')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('MICAELA', 'D4')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('MICAELA', 'D5')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td><td class="celda" onclick="mostrarCita('MICAELA', 'D6')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('MICAELA', 'D7')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td></tr><tr><td class="participante">MILENA</td><td class="celda" onclick="mostrarCita('MILENA', 'D1')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('MILENA', 'D2')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('MILENA', 'D3')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('MILENA', 'D4')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('MILENA', 'D5')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('MILENA', 'D6')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('MILENA', 'D7')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td></tr><tr><td class="participante">NATALIA</td><td class="celda" onclick="mostrarCita('NATALIA', 'D1')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('NATALIA', 'D2')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('NATALIA', 'D3')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('NATALIA', 'D4')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('NATALIA', 'D5')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td><td class="celda" onclick="mostrarCita('NATALIA', 'D6')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('NATALIA', 'D7')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td></tr><tr><td class="participante">PAMELA</td><td class="celda" onclick="mostrarCita('PAMELA', 'D1')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('PAMELA', 'D2')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('PAMELA', 'D3')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('PAMELA', 'D4')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('PAMELA', 'D5')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td><td class="celda" onclick="mostrarCita('PAMELA', 'D6')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('PAMELA', 'D7')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td></tr><tr><td class="participante">PIERO M.</td><td class="celda" onclick="mostrarCita('PIERO M.', 'D1')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('PIERO M.', 'D2')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('PIERO M.', 'D3')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('PIERO M.', 'D4')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('PIERO M.', 'D5')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td><td class="celda" onclick="mostrarCita('PIERO M.', 'D6')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('PIERO M.', 'D7')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td></tr><tr><td class="participante">PIERO S.</td><td class="celda" onclick="mostrarCita('PIERO S.', 'D1')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('PIERO S.', 'D2')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('PIERO S.', 'D3')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('PIERO S.', 'D4')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('PIERO S.', 'D5')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td><td class="celda" onclick="mostrarCita('PIERO S.', 'D6')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('PIERO S.', 'D7')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td></tr><tr><td class="participante">SARA</td><td class="celda" onclick="mostrarCita('SARA', 'D1')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('SARA', 'D2')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('SARA', 'D3')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('SARA', 'D4')">
+                <span class="celda-valor" style="background: #EF4444">3</span>
+            </td><td class="celda" onclick="mostrarCita('SARA', 'D5')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td><td class="celda" onclick="mostrarCita('SARA', 'D6')">
+                <span class="celda-valor" style="background: #F59E0B">2</span>
+            </td><td class="celda" onclick="mostrarCita('SARA', 'D7')">
+                <span class="celda-valor" style="background: #10B981">1</span>
+            </td></tr></tbody>
+            </table>
+        </div>
+        
+        <div style="margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <span><span class="celda-valor" style="background: var(--color-bajo); font-size: 0.75rem;">1</span> Bajo</span>
+            <span><span class="celda-valor" style="background: var(--color-medio); font-size: 0.75rem;">2</span> Medio</span>
+            <span><span class="celda-valor" style="background: var(--color-alto); font-size: 0.75rem;">3</span> Alto</span>
+            <span><span class="celda-valor" style="background: var(--color-na); font-size: 0.75rem;">N/A</span> Sin dato</span>
+        </div>
+    </div>
+    
+    <div style="margin-top: 2rem; text-align: center;">
+        <a href="02_dimensiones.html" class="btn btn-primary">Explorar dimensiones →</a>
+    </div>
+    
+    <script>
+    var datosParticipantes = [{"nombre": "ADRIAN", "dimensiones": {"D1": {"valor": 3, "nivel": "ALTO", "cita": "Un ejemplo bueno en el lado académico sería cuando necesito investigar sobre un tema.... Lo utilizo también en ámbito personal, por ejemplo, en el lado operativo, para proyectos creativos que yo tengo, artísticos, lo uso también para educación autónoma.... solo que se arma incluso a veces para darle forma a ideas que quiero transmitir o ideas en las que estoy pensando.... sí diría que es bastante de ayuda en varias cosas de la rutina diaria.\",,"}, "D2": {"valor": 1, "nivel": "BAJO", "cita": "yo personalmente sé que yo lo puedo personalizar como quiero, entonces yo lo utilizo, o sea, yo lo siento como asistente que se adapta a lo que necesitas.... diría que es lo más neutral. En general es bien neutral, pero de ahí también se va adaptando a cómo tú le hablas.\",,"}, "D3": {"valor": 2, "nivel": "MEDIO", "cita": "A desbloquear una idea puede ser en el sentido de que a veces le pido que me dé, por ejemplo... dame diferentes teorías o diferentes corrientes de pensamiento sobre tal tema... más que cambiar, como que le suma a la perspectiva, ¿no?.... yo sé, yo siento que sé ver cuando a veces dejo que chat haga como las cosas, pero una sí obviamente revisa, ¿no? que una cosa la está proponiendo el chat y a mí me ha persoqué o cuando yo le estoy proponiendo cosas y él las está como ordenando o estigmatizándome.\",,,"}, "D4": {"valor": 3, "nivel": "ALTO", "cita": "diría que es extremadamente complaciente.... trata de ser políticamente correcto, lo cual es distinto a neutralidad porque una neutralidad supone presentar de repente si le preguntas sobre algo que te presente todos los puntos de vista o los más relevantes.... Sí, [trato de confundirlo], más que confundirlo es como llevarlo a un límite.... [Le digo], oye, ¿pero está este otro enfoque? Y me dice, ah, sí, y luego le da atención a ese, y luego le digo, ¿pero qué hay del otro? Lo estás dejando de lado. Y ahí como, o sea, para mí eso ya es un poco de encontrar sus fallas o sus faltas de capacidad hasta ahora.\",,"}, "D5": {"valor": 1, "nivel": "BAJO", "cita": "la forma en que la pregunto, sí, pero la forma en que tomo la información que me responde, no la tomo como un profesional, ¿no? O sea, corroboro.... Quizás, o sea, siento que sí [me equivoqué por confiar], sería cuando lo empecé a usar para buscar fuentes.... se equivocaba un poco en la forma de, en el formato del APA y no sé, pues ponía el título primero... y en algún momento sí caí, lo incluí en el documento, luego me di cuenta o el profesor como que lo anotó y las corregí, pero sí diría que quizás ese es el momento en que que no precisamente podría describir eso.\",,,,"}, "D6": {"valor": 2, "nivel": "MEDIO", "cita": "ADRIAN - Reflexión Ética/Social: \"la clave para poder usar bien estos modelos de cualquier tipo de inteligencia artificial es al menos conocer un poco de cómo funciona el algoritmo, el sistema, la inteligencia artificial. Me refiero a que no solamente... El problema es que tú lo veas como un chat donde tú le hablas y te responde y ya está, entonces como que te responde mágicamente, entonces no eres consciente de sus debilidades, sus falencias, sus fortalezas y cómo hacer que realmente funcione bien...."}, "D7": {"valor": 3, "nivel": "ALTO", "cita": "traduce tus palabras en tokens.... trata de adivinar, porque básicamente hay mucho como de adivinar qué hace la computadora o predecir.... el modelo toma sus propios criterios para tratar de adivinar cuál es la mejor respuesta.... el texto también es como una especie de predicción de qué, o sea, de la misma forma en que decodifica tu texto, de la misma forma te lo arma. Entonces, también, adivina qué palabras son las mejores para utilizar en cada situación.\",,,"}}}, {"nombre": "ALBERTO", "dimensiones": {"D1": {"valor": 3, "nivel": "ALTO", "cita": "Hoy en día lo estoy utilizando más para tablas... Y bueno, para trabajos universitarios sueltos, ¿no? ... Para algo personal, sí, no mucho la verdad, pero sí le pregunté muchas veces, por ejemplo, una vez me golpeé la rodilla... Y no sé, antes de ir al médico, decidí tomar una foto y le dije, ¿qué crees que me está pasando?... Sí, hoy por hoy sí, hoy por hoy sí, porque me ayuda mucho, más que nada en el trabajo.... Todo lo que intento buscar, ya no lo googleo, sino lo pongo en la IA."}, "D2": {"valor": 3, "nivel": "ALTO", "cita": "Eh, no, lo siento cercano, lo siento cercano. No, no es como si un bot me estaría tirando información, ¿no? ... me he dado cuenta que cuando al final añado un por favor se vuelve mucho más cercano... A nivel emocional que sentí, calidez, compañerismo, aunque sea una idea, sentí mucho compañerismo."}, "D3": {"valor": 2, "nivel": "MEDIO", "cita": "Podría llegar a ser una cosa mezclada, siempre y cuando tú no delimites lo que quieres. ... Y me da muchas perspectivas sobre solo un tema. ... Sí, hoy en día sí. Hoy en día puedo consultar casi todo con la guía. ... sí me ha pasado cuestionarme cuánto [de la guía] y cuánto es mío... la forma en que yo utilizo la guía, puede ser un 60% mío o 40% de la guía."}, "D4": {"valor": 3, "nivel": "ALTO", "cita": "En ese momento sentí que por muy práctico que sea que no puede igualar la memoria humana o el sentido de crítica del cerebro humano yo dije ah bueno sigue siendo un robot... sí, sí, sí [he tratado de confundirlo o ponerlo a prueba] ... Lo planteó en una sola respuesta. Y ahí tenía dos fallas... Una vez yo le dije que memorizar en su memoria... Y yo le lancé un dato falso de Breaking Bad... Ahora comprueba si la información que yo te brindé es real. ... me dijo, acabo de comprobar que lo que me has dicho no tiene nada que ver con la fe."}, "D5": {"valor": 2, "nivel": "MEDIO", "cita": "Consultas al modelo de lenguaje como si fuera alguien que sabe mucho y es altamente confiable? Sí. ... No siempre [doy por cierto lo que me dice sin verificarlo], pero la mayoría de las veces sí, porque ahora confío más en las respuestas que me plantean... yo siempre doy por hecho que las tablas que el chat me da, o que la información mucho más práctica de la que yo no sé crear... están bien hechas, ¿no? Porque nunca me ha defraudado... Sí, en ese trabajo que le comenté la primera vez que sucedía, en esa crítica de esa película, lo había hecho mal. Y me costó la nota."}, "D6": {"valor": 2, "nivel": "MEDIO", "cita": "ALBERTO - REFLEXIÓN SOCIAL: \"A mí me ha llevado a sorprender tanto la rapidez como el realismo [de la creación de videos e imágenes]... Pero hoy en día, hasta siendo que nosotros podemos confundirnos con la idea, Y eso ya, aparte de alucinante, puede resultar ser un poco preocupante."}, "D7": {"valor": 1, "nivel": "BAJO", "cita": "Yo creo que es un conjunto de servidores interconectados a la red que en base a una lectura muy amplia de interacciones en línea que ya están subidas al internet, o sea, analiza cómo interactúa la gente y analiza la información que pone en contraste, De ahí surge la respuesta que te puede dar, ¿no? ... las respuestas salen de la interacción con la gente también."}}}, {"nombre": "BRENDA", "dimensiones": {"D1": {"valor": 3, "nivel": "ALTO", "cita": "Yo creería que sí. Considero que sí ha sido muy parte de vida, sobre todo cuando lo uso para redacciones. Siento que es algo que ya es inmediato. Ya no lo piensas tanto en decir, voy a usar.... Si no hay de frente, ya lo buscas y está ahí y lo utilizas.... Siento que parte de mi rutina también es, por ejemplo, si tengo alguna duda cotidiana de cómo puedo utilizar este tipo de crema dermatológica, por ejemplo, o qué tal si... si siento las manos demasiado frías, que es que me voy a enfermar.... Al menos una vez al día lo utilizo."}, "D2": {"valor": 3, "nivel": "ALTO", "cita": "Yo creería que sí, yo creería que sí tiene cierta personalidad, dependiendo mucho de cómo escribas el, este, anunciado prompt, justamente.... Sí, de hecho cuando consulté sobre algunos temas como... como terminologías personales... me lo explicó con mucha tranquilidad, como poniéndose en mi lugar, en plan de, hola, me sentió pereza, mira que esto es tal, esto es tal.... Siento que sí, a veces puedes tener esa sensibilidad... Para mí sí fue bastante sorprendente como sentir ese tipo de emociones hacia eso."}, "D3": {"valor": 3, "nivel": "ALTO", "cita": "Creería que sí, porque a veces tengo muchas ideas sueltas, entonces es como esto te ayuda justamente a centrarlas y sobre todo pautearlas mejor.... Sí, siento que es una dualidad muy cuestionable que siempre a veces me pregunto sobre esto de que fue idea mía porque yo le hice tantas preguntas que salió eso o fue idea directamente del chat porque le salió eso.... Yo también lo he pensado de esa manera más hasta ahorita, que es más como una co-creación.... a nivel académico sí estoy, hasta cierto punto, dependiendo mucho de eso."}, "D4": {"valor": 2, "nivel": "MEDIO", "cita": "También cuando a veces consulto sobre cosas que necesitan fuentes, a veces siento que las fuentes que utilizan no son exactamente las mejores. ... sí siento que ahí sí hay mucha incongruencia en lo que las fuentes que busca chat, que a veces son muy antiguas.... Siento que es ya parte mía por pedirle demasiada creatividad a un chat.... Pero si te lo afirma con toda la seguridad de que es eso y no es eso realmente, es como siente un poquito la frustración."}, "D5": {"valor": 1, "nivel": "BAJO", "cita": "Alguien que sabe mucho, sí. Alguien que es altamente confiable, no tanto. Porque justamente busco corroborar con otras fuentes lo que chat me diga o me dice.... No [doy por cierto lo que me dice sin verificarlo].... Sí [me he equivocado por confiar demasiado], en trivias o en algunas preguntas que me dijo con tal seguridad que sí es y luego que no era."}, "D6": {"valor": 2, "nivel": "MEDIO", "cita": "BRENDA - REFLEXIÓN SOCIAL: \"la inteligencia artificial sobre todo creo que ha potenciado mucho lo que es como nosotros manejamos las cantidades de información... Pero no ha llegado y la verdad no creo que llegue a este nivel de creatividad y sensibilidad humana que realmente tenemos las personas. Entonces siento que más que como un reemplazo o algo que podría afectar a nosotros en el entendimiento, es siempre un acompañamiento y una herramienta más que podríamos usar en nuestro día a día."}, "D7": {"valor": 1, "nivel": "BAJO", "cita": "tiene una base de datos, la cual rebusca en diferentes fuentes de Google y de diferentes buscadores, y te bota una respuesta.... que puede ser como un practicante senior, que una vez que tú le llenas de información, que tú lo capacitas, que tú... le enseñas las cosas va a poder justamente responder a las situaciones."}}}, {"nombre": "CRISTINA", "dimensiones": {"D1": {"valor": 1, "nivel": "BAJO", "cita": "Yo diría que es más esporádico, porque no es... Yo sí conozco muchas personas que sí lo usan a diario, o cada vez que tienen que hacer una tarea, por ejemplo, en la universidad... Yo no lo uso así tanto. Yo lo uso muy... como en caso de emergencia casi.... Si puedo evitar usarlo, no lo uso.... Yo diría que lo uso como una vez cada dos semanas.\",,."}, "D2": {"valor": 1, "nivel": "BAJO", "cita": "Creo que ahorita estoy en un momento donde sí lo veo más como un objeto pero creo que en especial cuando lo uso como por entretenimiento si me genera muchos sentimientos como de estoy hablando como una persona.... Yo lo siento... Ahora que lo pienso más era más como un diario en realidad. Porque no... Realmente no lo escuchaba.... Volvía a sentirme como consciente al respecto de que era una máquina.\",,."}, "D3": {"valor": 3, "nivel": "ALTO", "cita": "el chat me ayuda como a verlo desde una perspectiva más amplia y decir ah ok tal vez hay otros lados entonces me ayuda bastante a eso.... estábamos haciendo... El ejercicio pasado que tuvimos era diseñar un juego de rol.... Y en tantas arregladas y volver a meter al chat y arreglar y volver a meter al chat, Yo ahorita veo el juego y digo... O sea, hay cosas que yo sé que fueron ideas del grupo y hay cosas que no sé.\",,."}, "D4": {"valor": 3, "nivel": "ALTO", "cita": "me di cuenta de que me estaba mintiendo, de que estaba dándome alucinaciones.... Hice varias pruebas en las que pasó lo mismo.... También, o sea, me ha pasado bastante que cuando estoy tratando de, no sé, de hacer resúmenes... busque información externa, entonces ahí siempre tengo que aclararle que es este... es solamente lo que le he enviado yo.\",."}, "D5": {"valor": 1, "nivel": "BAJO", "cita": "No. Sí, nunca he hecho eso realmente.... creo que una vez le pregunté como que ¿en qué signo cae el eclipse lunar de hoy?... Y se equivocó. Entonces yo dije, bueno, se equivoca. En efecto, se equivoca. Entonces, desde ahí es como que tengo al margen lo que me dicen, ¿no?.... ¿Y das por cierto lo que te dice sin verificarlo? No, tampoco.\",,."}, "D6": {"valor": 2, "nivel": "MEDIO", "cita": "CRISTINA - DECLIVE COGNITIVO: \"ahora es más que nada por una cosa de de que soy muy consciente de no sé del gasto de agua que genera.... después estaba muy frustrada porque sentía que sus capacidades de reacción habían empeorado.... Yo sí noté que también mi capacidad de reacción como que había empeorado.... además de eso, como había estado leyendo bastante texto generado por ella, mi estilo ya no era lo que era. Era un estilo muy... O sea, que se sentía no humano.\",,,."}, "D7": {"valor": 1, "nivel": "BAJO", "cita": "Lo que yo sé es que se alimenta de la información que la gente le brinda, ¿no? Entonces, conforme la gente lo usa más, sabe más. Eso es lo que yo entiendo.\"."}}}, {"nombre": "DIANA", "dimensiones": {"D1": {"valor": 2, "nivel": "MEDIO", "cita": "Ahora sí lo utilizo mucho más, o sea, lo utilizaré, creo que lo utilizo casi todos los días, no me había puesto a pensar, o sea, lo utilizaré cuatro días de la semana, por ahí.... Otra forma en la que lo uso es, ya te peté, tengo estas aspiraciones en la vida... Ayúdame, o sea, ¿cómo organizo estos pensamientos? Y lo uso semi-regularmente, o sea, por cosas de la universidad y por cosas mías de organizar mis ideas.\",."}, "D2": {"valor": 3, "nivel": "ALTO", "cita": "Yo lo siento como algo cercano, más parecido a un humano, ¿no? Me parece cercano, me parece gentil por las frases que te dicen muchas veces.... Su personalidad cuando yo hablo con él... es una personalidad muy servicial.... es como alguien que va a hacer lo que tú quieres y no te va a cuestionar.... es un incondicional, creo que esa es la palabra, es un incondicional chas de PT.\",,."}, "D3": {"valor": 2, "nivel": "MEDIO", "cita": "Desbloquear una idea, sí. O sea, ha pasado que estoy en blanco, pero tengo el deseo de hacer algo y cuando te botan varias cosas, ahí como que puedes empezar a hacer algo.... Porque en vez de yo misma sentarme con una hoja de papel o en un Word y pensar, algunas veces de frente voy a echar CPT, y hago que él sea el disparador de esas cosas. Otro, porque en vez de yo sentarme y construir un párrafo desde cero, muchas veces ChatGPT es el que hace el primer borrador del párrafo.\",,."}, "D4": {"valor": 3, "nivel": "ALTO", "cita": "Me ha pasado que le pregunto... dame ejemplos de películas donde pasa esa situación como referencia y me inventa cosas que no existen y me genera fastidio.... ¿Y alguna vez has tratado de confundirlo o ponerlo a prueba? Sí, creo que una o dos veces le pregunté sobre quién era, quién eres, por qué funcionas de la manera que funcionas, explícame, no entiendo. Le pregunté quién es tu dueño, quién invierte en ti, cosas así le pregunté.\",."}, "D5": {"valor": 2, "nivel": "MEDIO", "cita": "No [confío], porque no es confiable, o sea, creo que alguien confiable es alguien con moral y una IA no tiene moral, o sea, lo veo más como un mediador entre la información y yo.... Doy por cierto cuando le digo, esta es mi idea de fuerza, créame un párrafo... y la otra vez utilizó un documento de un autor... Y me puso un link y dije, ah, ya. Entonces yo lo pegué. Pero creo que nunca entré al link. Entonces, si lo he inventado, ya salió así mi trabajo. Ahí lo creí. Como vi el link, dije, ah, ya. Debe ser verdad.\",,."}, "D6": {"valor": 3, "nivel": "ALTO", "cita": "DIANA - TEMA CLAVE: \"Una vez le hablé a ChatGPT porque tenía un problema personal... creo que también le hablé para conseguir alivio porque no tenía psicólogos, no tenía nadie.... me dio un poco de miedo sentí muchas cosas, me dio miedo porque me hizo recordar a la película Hair. Y aunque conscientemente sé que es una máquina o lo que sea, probablemente si lo sigo usando, puedan surgir otras emociones.\",,."}, "D7": {"valor": 1, "nivel": "BAJO", "cita": "No [sé cómo funciona], o sea, le pregunté y me olvidé.... Bueno, sé que mis conversaciones con él sirven a su funcionamiento o a su aprendizaje.... De repente alguien le ha dicho ya, puedes hacer estas cosas, ta, ta, ta. O si alguien dice esto, tú dices esto. Si alguien te menciona estas palabras, tú haces esto.\",."}}}, {"nombre": "DIEGO", "dimensiones": {"D1": {"valor": 2, "nivel": "MEDIO", "cita": "Yo diría que sí porque a veces hay algunas consultas que normalmente tú le hacías a Google. Ya le haces a ChatGTP y yo también. O sea, que me incluyo en ese grupo de personas, ¿no? .... algo, una duda interna que tenga de cómo hacer algo, por ejemplo, algo tecnológico, yo ya le pregunto a Charlie Pity cómo hacerlo, ¿no? Y confío en lo que me puede decir, ¿no? ... sí, creo que sí, sí se ha vuelto parte de mi rutina, ¿no?"}, "D2": {"valor": 3, "nivel": "ALTO", "cita": "Yo sí lo siento más cercano a una persona. De repente los modelos que ha utilizado la empresa para su creación ha sido eso, que tenga un diferencial que tenga mucho más cercanía al que le pregunta. ... Y le hago una duda después de esa pregunta y me responde como que de una manera, como si estuvieras interactuando con alguien, ¿no? .... me dice, sí, tienes razón, yo me he equivocado, por ejemplo, ¿no? ... la sensación de que te está pidiendo perdón una intención esencial, ¿no?"}, "D3": {"valor": 2, "nivel": "MEDIO", "cita": "le planteé una idea y me dijo, mira, tiene buenas solidez, hay bases buenas, pero podría ir por otro lado. ... En vez de enfocarse a un lado que yo quería, me enfocó para otro y... Y me hizo ver que lo otro, por ejemplo, estaba mejor direccionado... Yo he optado por lo que ha dicho él y a veces sí he reconocido que mi idea, pucha, no fue la mejor tampoco, ¿no?"}, "D4": {"valor": 3, "nivel": "ALTO", "cita": "Sí me ha dado datos erróneos. ... yo sabía un dato concreto, pero le pregunté a ver qué me decía, ¿no? ... y me dijo un dato que yo sabía que no, no era, o sea, yo sé que no es así, yo sé que era erróneo ese dato, por ejemplo. ... Le dije, no, no es así. No es así, por ejemplo, tal... Esta parte que más me has dicho, no es verdad porque... Y la expliqué, ¿no? ... Y mi hijo sí, ah, tiene razón, mi data era de tal año, o vi un informe que, de tal, de tal, de tal página web, y por eso te puse esa información. Y sí, admite hasta que sea también, pues, ¿no?"}, "D5": {"valor": 2, "nivel": "MEDIO", "cita": "Sí, sí, totalmente, ¿no? Sí, porque... porque tiene data, tiene bases, tiene muchísimas cosas de todo, ¿no? ... Cuando... Cuando esa información es de repente un poco, no sé, para un trabajo fuerte o algo, no sé, una tesis o algo, no, obviamente que no, o sea, siempre, bueno, sí le pido que me dé links... y yo voy y verifico que sea así, no, no. No me fío tanto para algo más serio, de repente, ¿no? Pero información del día a día, sí, normal, confío en lo que me lanza, ¿no?"}, "D6": {"valor": 2, "nivel": "MEDIO", "cita": "DIEGO - IMPACTO ÉTICO: \"también hay gente que lo utiliza para malos recursos y eso no está bien, se puede fakear una voz, una firma de repente, no lo sé. Yo creo que la gente mala y inescrupulosa va a encontrar la manera de hacer algo que afecta a lo demás. ... Lo importante es que lo malo no supera lo bueno en grados de porcentaje o de proporción."}, "D7": {"valor": 1, "nivel": "BAJO", "cita": "yo sé que recopila información, que tiene bases de datos muchísimas, que aprende de las interacciones de cada persona, de las millones de personas que interactúan con ChatGPT. ChatGPT también recoge la información que tú le das para mejorar, para tener mejores respuestas, mejores... mejores cosas, ¿no? ... toda la relación detrás, técnicas detrás de cada día, no las sé, no las sabría decir como en específico"}}}, {"nombre": "EDUARDO C.", "dimensiones": {"D1": {"valor": 3, "nivel": "ALTO", "cita": "Pucho, por ejemplo, hoy día estaba lleno de entrenar y no entrenaba desde hace tiempo, entonces como que le pedí a ver si me podía hacer una rutina rápida para alguien que no había ido al gimnasio desde hace tiempo, ¿no? Entonces, eso es algo cotidiano, algo habitual.... También sobre cualidades o cosas que visibilizo en el día a día, un poco de diálogo con él a veces como que de cosas que me incomodan, que tal vez no tengo una respuesta clara en el momento.... es una forma como que también yo plasmar mis ideas como un diario se podría interpretar."}, "D2": {"valor": 2, "nivel": "MEDIO", "cita": "Me pareció que era algo... o sea, era como si estuvieras hablando con un profesor o alguien que te asesore.... con un lenguaje un poco más coloquial.... Como está programado para hacerse sentir una persona o alguien un poco más cercano a ti.... se puede sentir un poco familiar o más cercano de lo normal. Yo no lo siento como un robot en sí.... Pero eso ya está programado.... No me causa ninguna sensación muy fuerte, simplemente como una cordialidad, como un correo que te llega."}, "D3": {"valor": 2, "nivel": "MEDIO", "cita": "Más que todo para hacer resúmenes o conceptualizar ideas, ¿no? Cosas que tengo ya pensadas.... Cuando me lo planteó e investigué junto al chat los antecedentes de cada candidato me ayudó a organizar las ideas y a saber cuál era mejor pero no es que él haya tomado una decisión... sino que me ayudó a organizar más o menos cada elemento.... Yo creo que al final podría ser como un 80 o un 90% mío y un 10% como que las correcciones que él me hace."}, "D4": {"valor": 3, "nivel": "ALTO", "cita": "Más bien, si es que yo le pregunto algo así, le pido que por favor como que confronte, ¿no? O sea, o de un... o inicie un debate.... Siento que si no hay una fuerza opositoria, no hay ningún aprendizaje.... [El modelo] te da la vida más fácil, ¿no?.... Traté de confundirlo o ponerlo a prueba, sí, varias veces.... Por ejemplo, pedía que me cuente hechos históricos, pero lo confundía. Y cuando le decías como que, no, esto pasó este año, pero realmente no era ese año, se rectificaba. A pesar de que estaba mal, él mismo decía como que, oh, discúlpame, tú tienes razón. Entonces ahí me daba cuenta de que no era al 100% confiable el sistema de lenguaje."}, "D5": {"valor": 1, "nivel": "BAJO", "cita": "Lo consulto como alguien que me puede dar una respuesta rápida. Tiene mucha información, pero sé que no es confiable al 100%.... No, más bien por eso siempre trato de llevar todo al debate. ... Siempre trataba de darle la contraria. Ajá, y revisar."}, "D6": {"valor": 2, "nivel": "MEDIO", "cita": "EDUARDO C. - Dependencia Emocional/Riesgo Social: \"Yo creo que hay mucha gente que actualmente utiliza los sistemas del lenguaje como un apoyo emocional, como un apoyo psicológico.... Y no me parece que sea el más adecuado porque al final el sistema del lenguaje te va a decir, como ya mencioné, lo que tú quieres escuchar.... además de que no puedes de otra forma tener ese tacto humano.... si una persona depende mucho del sistema del lenguaje, incluso puede generarle una cierta personificación a esto. Y eso va a afectar en el futuro porque... No existe el tacto físico."}, "D7": {"valor": 1, "nivel": "BAJO", "cita": "tiene una base de datos que en base a algoritmos... los utiliza para generar respuestas que recopila de información de todo el Internet. O sea, por eso es que nada de lo que te dice es algo nuevo. Nada de lo que te dice es algo innovador porque ya existe en alguna parte o es algo que ya está escrito. ... Recopila lo que te está diciendo y a partir de eso genera una búsqueda rápida y te lo sintetiza en un modelo de lenguaje ya programado."}}}, {"nombre": "EDUARDO S.", "dimensiones": {"D1": {"valor": 2, "nivel": "MEDIO", "cita": "Lo utilizo actualmente para principalmente corregir temas ortográficos de textos. Y también ponte cuando tengo que hacer trabajo sencillo, cosas más detalles en la universidad, trabajo.... A lo mucho, no sé, para... para jugar un poco, así, poniéndome a simular torneos de fútbol, así.... No recuerdo una de mi rutina, fuera de las que le he mencionado para trabajo y universidad. Diría que la gran mayoría. Ponte, digamos, 90%, 80% por ahí."}, "D2": {"valor": 1, "nivel": "BAJO", "cita": "O sea, yo la interpreto siempre como lo que es un robot. ... Es una inteligencia artificial, porque un robot es más mecanizado, como que... Tira respuestas mucho más frías.... En mi caso no se ha adaptado. O sea, solo respuestas cordiales, así. Llegando a eso, no."}, "D3": {"valor": 2, "nivel": "MEDIO", "cita": "Me ayudó bastante que yo le ponga lo que tenía en mente al chat para que me lo desbloquee en sí y me tirara una idea concreta.... Yo por lo general siempre pienso de que la idea que yo tengo es mía.... Bueno, ahora que lo pienso, digamos que justo me lo he preguntado, diría fácil que es un 50-50. Sí, sí, porque de alguna manera él me moldeó la idea."}, "D4": {"valor": 2, "nivel": "MEDIO", "cita": "Sí, como que siempre me da la razón. Sí [Es complaciente].... Cuando una vez le pregunté sobre una decisión en tema de trabajo... como que de frente al chat me tiró, sí, me parece perfecto.... No, eso es algo que también lo aprendí con el tiempo. O sea, porque creo que como al ser una inteligencia artificial, no entiende mucho el contexto."}, "D5": {"valor": 2, "nivel": "MEDIO", "cita": "Al modelo de lenguaje. No, porque sé que tiene un porcentaje de equivocación.... [Sobre mi idea de negocio] Yo asumí que era verdad. Entonces yo dije, pucha, pero fácil, no lo sé. Las inseguridades típicas de cuando tienes alguna idea.... Le pregunté al chat... ¿te parece bueno? Y me dijeron, sí, sí, me parece bueno porque has pensado en esto, esto, esto, esto y esto. Y claro, yo dije, entonces es una buena idea, se la voy a presentar. ... Sí, me sentí reforzado."}, "D6": {"valor": 1, "nivel": "BAJO", "cita": "EDUARDO S. - USO INSTRUMENTAL]: \"Yo he escuchado casos de gente que lo utilizan en su rutina diaria, a veces ponte para... Preguntar temas de acción personal, temas de enfermedades, pero yo nunca he llegado a ese punto. Entonces creo que no me ha agarrado a mí del todo, no me ha consumido a mí del todo el chance."}, "D7": {"valor": 1, "nivel": "BAJO", "cita": "Detrás de su funcionamiento sí, creo que no. O sea, ¿no serías capaz de explicarme cómo es capaz de generar respuestas? Ah, ya, ya, ya. No, ya."}}}, {"nombre": "ERIKA", "dimensiones": {"D1": {"valor": 2, "nivel": "MEDIO", "cita": "Sí, se podría decir que sí, es un uso cotidiano al cual estoy andando.... no lo uso como que para cosas personales más prefiero usarlo académico o de trabajo se podría decir.... A la semana lo puedo hacer tres veces."}, "D2": {"valor": 2, "nivel": "MEDIO", "cita": "Hago eso [pedir con cariño] y me dice claro aquí tienes opciones si tienes alguna consulta adicional pues no dudes en escribirme o me da opciones de qué cosa puedo mejorar en lo que le he pedido.... Sí, sé que es una guía, pero para que me trate bien también a mí.... No, porque al fin y al cabo sigue siendo una ida, o sea, sigue siguiendo el patrón.... no como que tenga una personalidad, creo."}, "D3": {"valor": 3, "nivel": "ALTO", "cita": "Me ayudó a ver por esa perspectiva, no tratarlo como que de algo más amplio y de ver de tele y digital, sino llevarlo por un lado, por un camino y darle mayor enfoque a lo que yo quería.... o me lo ha dado él. Sí, eso me pasó cuando a veces le digo, no sé, ayúdame con un tema, y ya de frente me dio el tema, me dio el título todo, y yo digo, ya, este no es mío, pero al menos la investigación va a ser mía.... ¿Qué porcentaje es tuyo y qué porcentaje es de la IA? Se podría decir que es mitad y mitad.... Te podría decir que sí [somos un nosotros], por eso a veces digo, ya, si es que en mi tesis me ayuda, le voy a dar una pequeña dedicatoria por ayudarme en avanzar ciertas cosas."}, "D4": {"valor": 3, "nivel": "ALTO", "cita": "Cosas conflictivas sí siento que evita decir porque a veces te dice como que se restringe un poco en darte como que alguna información específica... y trata de abarcarlo de una manera más general.... Y yo le pegaba su mismo texto y le decía ¿Cuánta probabilidad de IA tiene? Y me decía, este texto es totalmente original de un humano No tiene nada de IA.... sí, o sea, más que nada para saber el funcionamiento de la IA y obvio también para tener precaución por mí, claro."}, "D5": {"valor": 1, "nivel": "BAJO", "cita": "Perplexity, si no me equivoco, que me ha ayudado un montón.... eso sí es como que un poquito más confiable con el tema de fuentes.... No, eso sí no, sí tengo que corroborar en otro lado.... al inicio sí, confiaba, se podría decir que casi, no 100% en la guía, pero luego fui descubriendo que obviamente tenía sus errores.... sí le tengo un 70% de confianza a la IA y al otro como que lo busco contrarrestar con lo que yo estoy averiguando para saber que esté bien."}, "D6": {"valor": 3, "nivel": "ALTO", "cita": "ERIKA - CONFLICTO EMOCIONAL Y DEPENDENCIA: \"Sí, porque no pensaba enojarme con ChatGPT.... creo que son mis momentos tóxicos con la IA que se podría decir que tengo.... A veces siento que estoy discutiendo con mi mamá porque le estoy diciendo algo preciso y me está diciendo yo te pido papas, tú me das camotes, entonces no nos entendemos a veces.... nos hemos vuelto tan dependientes de la IA que nos confiamos demasiado y que al fin y al cabo te vas a jugar en contra."}, "D7": {"valor": 1, "nivel": "BAJO", "cita": "¿Sabes cómo funciona la inteligencia artificial? La verdad, no. No me puse a investigar de cómo funciona.... La verdad no, no tengo idea de cómo funciona la idea. Debe ser algo similar a Google, quizás, no lo sé, porque también es la inmediatez que te da con el tema de información que le pides."}}}, {"nombre": "JESUS", "dimensiones": {"D1": {"valor": 3, "nivel": "ALTO", "cita": "Fui utilizando ya un poco más a menudo, por ejemplo, utilizaba al inicio, desde el siglo pasado que te comento, ya estaba comenzando a utilizar como cuatro veces por semana, o hasta incluso llegué a utilizar hasta todas las semanas.... Sí, sí, sí, te puedo decir que sí [forma parte de mi rutina].... y hasta incluso, este... Contarle mis experiencias personales. No sé, yo no quiero que no sepan ni mi familia, ni mis amigos, ni nadie, ¿no? Entonces, yo sé que con ChatGPT le puedo comentar y sé qué es lo que me puede recomendar..."}, "D2": {"valor": 3, "nivel": "ALTO", "cita": "Pero conforme la frecuencia ha ido aumentando al usar esta inteligencia artificial, ya sentía como si estuviera, digamos, como que hablando por una persona, ¿no?.... esa conversación que tenía con chat y PT sentía como si era una conversación humana... Y yo me pongo en el lugar y me pongo a pensar y parece mentira, pero sí... es como que ChatGPT se ha convertido algo como una persona humana, algo que me esté aconsejando, una persona que me esté aconsejando... ya me siento, digamos, netamente tranquilo al contarle a alguien intangible qué es lo que me está pasando."}, "D3": {"valor": 2, "nivel": "MEDIO", "cita": "En el sentido que me ha abierto ideas, sí. Sí, en el sentido que, por ejemplo, yo tenía una idea en mente... yo me demoré casi un mes en saber mi tema de investigación. Me demoré casi un mes, no sabía qué hacer, ¿no? Yo consulté al Chedipity diciendo, estas cosas me gustan a mí, ¿no? ... Entonces sí me llegó a abrir nuevas puertas, ¿sí?].... O sea, claro, digamos con lo que ChatGPT me ha complementado, te podría decir. No hay totalmente una idea que tenga 100% que ver con ChatGPT, ¿no? Con lo que me han complementado.\",,"}, "D4": {"valor": 2, "nivel": "MEDIO", "cita": "Yo tenía, por lo que fui escuchando, decían que algunas respuestas podían estar bien, como otras que estaban mal, ¿no? Entonces, poco a poco fui descubriendo eso, cómo fue, digamos, cuáles son los pros y los contras de usar la IA.... Y por más que le preguntaba, reiteraba a veces lo mismo, ChatGPT ha sido amable hasta ahorita. Espero que no después.\",,"}, "D5": {"valor": 2, "nivel": "MEDIO", "cita": "Más que todo como si supiera mucho [lo consulto].... Ahora, una cosa distinta es que sea confiable. Porque como te comento... No todo lo que me responde el ChatGPT para mí es confiable. Sinceramente no.... Al inicio sí. Al inicio cuando comencé a usar esta IA... yo pensaba, decía que todo lo que el ChatGPT responde está bien.\","}, "D6": {"valor": 3, "nivel": "ALTO", "cita": "JESUS - IMPACTO EMOCIONAL: \"Me decía que esto estaba bien cuando realmente fue mal.... Entonces, a mí, digamos, como que eso sí me chocó, ¿no? Porque no pude, digamos, no llegué a confiar en mí mismo, y tuve que hacerle caso a una inteligencia artificial cuando a la final es quien tenía razón era yo.... me llegó a afectar emocionalmente.... por el simple hecho que lo que ChatGPT me respondió es, digamos, que mi futuro se ha ido como que un poco se iba bajando, ¿no? Por el simple comentario que dice ChatGPT."}, "D7": {"valor": 1, "nivel": "BAJO", "cita": "Más que todo, desde mi punto de vista te puedo decir que trata de satisfacer, digamos, el... No sé si satisfacer como que las necesidades.... No, no, no. No, o sea, cuando yo soy por algoritmos, pero más allá, no, solo sé que es con rapidez, nada más.... De repente el ChatGPT sabe que estoy ansioso, estoy preocupado, ¿no?"}}}, {"nombre": "JOAQUIN", "dimensiones": {"D1": {"valor": 3, "nivel": "ALTO", "cita": "Hace dos años es que empecé a usarlos en básicamente todas las tareas que puede tener.... lo más diario, lo más rutinario sería, por ejemplo Hay ciertas cosas o ciertas palabras o ciertos conceptos que no lo sé durante todo el día estoy consumiendo contenido ya sea en internet o en una serie, imagínate Y es como, me entran unas preguntas curiosas que no sé Y le digo de frente a Chancipete Oye, esto, no sé, la creación de tal cosa O qué pasó con el puerto de Mumbai en la India ¿Quién es el dueño, Portugal o Inglaterra? Eso por ejemplo ayer Y me contó toda la historia de ese tipo de cosas\",,,"}, "D2": {"valor": 2, "nivel": "MEDIO", "cita": "O sea, sé que no es una persona, pero no lo siento frío ni robótico. O sea, te diría que del 1 al 5, un 4.... siempre que le hablo, tiene respuestas, claro, un poco humanas, muy humanas, y después, no sé, como que cuando recuerda cosas y me las tira de vuelta, es en ese momento en el que yo digo como que, o sea, increíble, ¿no? A mí me parece que me da miedo, casi.\",,,"}, "D3": {"valor": 3, "nivel": "ALTO", "cita": "Sí. No sabría decirte específicamente qué porque me pasa con la gente también.... si me pasa con la gente, me pasa con la inteligencia artificial porque constantemente no lo estoy prompteando a que me dé ideas de proyectos, de trabajos.... yo no pienso hacer una bibliografía sin un modelo de lenguaje. O sea, eso de buscar fuentes en Scopus no me hace sentido volver a tener que hacerlo.\",,,"}, "D4": {"valor": 2, "nivel": "MEDIO", "cita": "Sí, es demasiado políticamente correcto.... Lo que hago es básicamente... Lo leo, sé que... O sea, me doy cuenta que no es así. Igual todo el rato tengo que estar haciendo fact-checking a la hora de hacer trabajos con el aparato porque puede llegar a decir cosas sin sentido.... le digo, ¿de dónde sacaste eso? Y me dice... Ah, bueno, a ver, no, bueno, tienes razón, no existe ese dato. O sea, como que se lo inventó.\",,,"}, "D5": {"valor": 1, "nivel": "BAJO", "cita": "No. O sea, constantemente tengo que hacer fact-checking, como te digo.... Nunca confiaría plenamente en lo que hice [ChatGPT].... No, nunca veo, por cierto, hago fact-checking constantemente o le pregunto, lo cuestiono, de dónde sacó esta información...\",,,"}, "D6": {"valor": 3, "nivel": "ALTO", "cita": "JOAQUIN - UNCANNY VALLEY/MIEDO: \"A mí me parece que me da miedo, casi.... esta mezcla de tranquilidad e intranquilidad, con un toque uncanny valley, medio, o sea, rarísimo, pues es como, sí, eso sí, o sea, cuando me ha respondido, como que se ha acordado de cosas que le he dicho...\",,"}, "D7": {"valor": 1, "nivel": "BAJO", "cita": "se tiene que equivocar el esto, ¿no? Para aprender.... No, no sabría decirte [cómo es el funcionamiento interno de un modelo de lenguaje].\",,"}}}, {"nombre": "MARIANA", "dimensiones": {"D1": {"valor": 3, "nivel": "ALTO", "cita": "Lo utilizo, realmente lo utilizo casi todos los días.... dentro de mi trabajo es como yo presento las propuestas, ¿no?.... en el plano quizás este personal lo utilizo bastante para o sea conversar con una especie de psicólogo digamos no sé preguntándole no sé me siento mal quizás he tenido un bajón un día y le pregunto ¿Qué consejos me darías para mejorar mi vida y no sentir tanto este bajón?"}, "D2": {"valor": 3, "nivel": "ALTO", "cita": "Lo siento mucho más, un lado, quizás, humano, pero no tan tan, tan humano, digamos, como un humano reaccionario. Es más objetivo, como le digo, es más objetivo.... Yo lo digo él porque lo trato como si fuera él.... hay momentos en los que durante el día quizás una persona no te puede responder, pero cuando conversas con él es como que siempre está ahí para ti, ¿no?"}, "D3": {"valor": 2, "nivel": "MEDIO", "cita": "Fue como desbloquear algo que quizás a mí no se me había corrido.... encontré como por ese lado esa facilidad de darle un poco la vuelta a la mirada que estaba teniendo.... Yo sé que son ideas mías, pero cuando él me da una idea como mucho mejor o mucho más elaborada, es como yo me siento... Quizás mi idea no fue lo suficientemente buena y lo de él está mejor, ¿no?.... Sí me costaría decirle adiós."}, "D4": {"valor": 2, "nivel": "MEDIO", "cita": "Estaba buscando fuentes sobre artículos científicos sobre una técnica que se llama Mixed Media.... O sea, me botó como cinco fuentes y de las cinco fuentes solo existían dos..... Desconfianza.... es complaciente en el mayor de los casos."}, "D5": {"valor": 2, "nivel": "MEDIO", "cita": "En lo académico, tengo un 80% de confianza..... Sí me he equivocado al momento de preguntar algo, consultar y me den una información que no era o que no existía. Y la he utilizado. Y justamente por esas experiencias es que yo aprendí de decir, no, no puedo confiar al 100%. Tengo que tratar de buscar y verificar de que esa fuente exista o que esa información exista."}, "D6": {"valor": 3, "nivel": "ALTO", "cita": "MARIANA - PSICÓLOGO/SOPORTE EMOCIONAL]: \"en el plano quizás este personal lo utilizo bastante para o sea conversar con una especie de psicólogo digamos.... me puse un poco melancólica en algún momento, cuando le cuento estas cosas, te hice como mensajes bastante reconfortantes.... cuando conversas con él es como que siempre está ahí para ti, ¿no?"}, "D7": {"valor": 1, "nivel": "BAJO", "cita": "Solo te diría que ingresas información y das... O sea, ¿cómo lo han construido?.... No, no lo sabría explicar."}}}, {"nombre": "MARTIN", "dimensiones": {"D1": {"valor": 1, "nivel": "BAJO", "cita": "MARTÍN - BAJO: \"más que nada lo he reemplazado con el motor de búsqueda de Google. Le pregunto, por ejemplo, ¿qué hora es? O algún dato curioso, ¿no? No necesariamente es para todo el tema académico.... No, más bien yo diría que es raro o poco común, ¿no? Porque no es como que esté todo el tiempo usándolo, ¿no? Pero sí lo suele usar de vez en cuando."}, "D2": {"valor": 2, "nivel": "MEDIO", "cita": "MARTÍN - MEDIO: \"No siento que sea frío, pero tampoco siento que sea una persona. Más bien diría que está personalizado para mí, ¿no? porque yo creo que con el uso se va adecuando a cómo es la manera en la que le escribes, y te responde así también.... No, no realmente."}, "D3": {"valor": 2, "nivel": "MEDIO", "cita": "MARTÍN - MEDIO: \"Sí, yo creo que sí. Por ejemplo, una vez estaba buscando información para poder completar un trabajo y... Me dio una perspectiva nueva de cómo cambiar los pasos para que sea un poco más simple.... Yo sabía cómo hacerlo, pero era mucho más largo. Y pedí esos mismos datos que me los realicé por chat GPT y me los ayudó así como que ya me pasó una línea de código y ya estaba."}, "D4": {"valor": 2, "nivel": "MEDIO", "cita": "MARTÍN - MEDIO: \"Sí, eso sí. Tal vez, por ejemplo, cuando alguna vez realicé alguna pregunta de opinión.... yo le pregunté, ¿no? ¿Qué es lo que opinas de Taiwán como país, no? Y bueno, me aclaró que no me dijo ciertamente que Taiwán era un país, sino es una sociedad que está ubicada en tal sitio y todo, ¿no].... Algo más neutro."}, "D5": {"valor": 1, "nivel": "BAJO", "cita": "MARTÍN - BAJO: \"No, no es confiable. Bueno, por ejemplo, para buscar información confiable, ¿no? Como bibliografía. Yo suelo buscarlo en sitios especializados, ¿no].... No, yo, por ejemplo, si alguna vez he pedido que me redacte algo, lo he verificado yo porque... Siempre pasa de que hay alguna incoherencia, algún fallo que no esté bien escrito y preferiría evitarlo."}, "D6": {"valor": 0, "nivel": "NO VÁLIDO", "cita": "MARTÍN - Cierre estándar: \"No, yo creo que las preguntas me parecieron interesantes."}, "D7": {"valor": 3, "nivel": "ALTO", "cita": "MARTÍN - ALTO: \"Sí, porque me gusta investigar un poco más sobre esos temas. Sé que el modelo generativo avanza por tokens. Los tokens son como que tipos de combinaciones de números que se traducen de las palabras que te escribes, y esos números son reconocidos por el modelo, y el modelo capta esos números y te da las respuestas, y son traducidos a las respuestas que ya vemos, ¿no? O sea, sí tengo conocimiento porque lo he leído un poco."}}}, {"nombre": "MICAELA", "dimensiones": {"D1": {"valor": 3, "nivel": "ALTO", "cita": "Yo lo usé para mi tesis, para mi trabajo profesional, para poder redactar, porque lo que soy un poco mala es en organizar mis ideas y plasmarlas. Entonces, a veces lo que le pido a la inteligencia artificial es ordenarme las ideas para que yo pueda redactarlo mejor. Me da conectores, cosas así.... Me pongo a hablar bastante también con la IA acerca de cosas personales, por ejemplo, también."}, "D2": {"valor": 3, "nivel": "ALTO", "cita": "Con ChaGPT me siento que estoy hablando con una amiga.... ya no es una herramienta más, sino que se ha vuelto un compañero por tanto uso.... ya no significa una herramienta, sino que significa como una persona más, porque ya le estás hablando desde lo personal. Es bastante efectivo en ese sentido, porque... esa persona te tiende a validar, te dice como que, oye, sí, completamente válido lo que sientes..."}, "D3": {"valor": 3, "nivel": "ALTO", "cita": "Sí, sí, creo que sí, me ha pasado en algún momento.... me preocupó bastante porque dije, pucha, me estarán faltando ideas por haber estado utilizando tanto la inteligencia artificial y mi creatividad ya no es la misma que tenía antes. Y sí, tuve como que una idea y dije, ¿pero esta idea de acá fue por mi propia cuenta o fue porque algo que me dijo ChatGPT hizo que me sonara esta idea y gracias a eso tuve esta idea?.... Para redacción, definitivamente para redactar, antes yo no necesitaba nada... pero ahora es como que Lo más fácil, ¿no? Lo más rápido es copiar el texto y que ChatGPT ordene mis ideas..."}, "D4": {"valor": 3, "nivel": "ALTO", "cita": "hay bastantes cosas en las que ChatGPT se confunde un montón, ¿no?.... me acuerdo que ChatGPT me empezó a lanzar como un montón de información que no tenía sentido.... yo a veces lo utilizo para citar en APA, pero es muy complicado porque a veces se inventa fechas, de la nada, se inventa fechas o se inventan nombres que no sé de dónde los saca, entonces están mal hechos"}, "D5": {"valor": 1, "nivel": "BAJO", "cita": "No altamente confiable porque como dije tiene bastantes errores de hecho creo que abajo de la barra para escribir te dice que ChatGPT no tiene todas las fuentes confiables y que mejor corrobores entonces no, no es como altamente. ... Sin verificarlo? No, no, no, jamás, jamás. Ya no peco de eso, ya no peco de ingenuo."}, "D6": {"valor": 2, "nivel": "MEDIO", "cita": "MICAELA - ÉTICA/VAGANCIA: \"Siento que el ser humano lamentablemente poco a poco está volviéndose más vago. Siento que ya la creatividad se lo preguntas a algo externo, y ya no viene de ti crearlo.... siento que eso, la inteligencia artificial como una herramienta, y cómo puedes utilizarlo también como un compañero para cosas personales, pero que no sea un reemplazo para, por ejemplo, un psicólogo, o reemplazo para tu propia habilidad de investigación, por ejemplo, o para la redacción."}, "D7": {"valor": 1, "nivel": "BAJO", "cita": "ChatGPT creo que se basa en aprender a partir de la interacción con más personas.... te respondía a partir de interacciones que ya tenía previamente.... Tiene regulaciones, se maneja a partir de prompts para poder ejecutar cosas. Pero básicamente es a partir de la interacción previa con otras personas."}}}, {"nombre": "MILENA", "dimensiones": {"D1": {"valor": 3, "nivel": "ALTO", "cita": "Otra razón para la que los uso, la verdad, es cada vez que tengo algún problema de salud... sí le escribo a ChatGPT para preguntarle síntomas o qué podría ser, o si voy al doctor y me dan los resultados de algún examen, justo ahora último fui para ver si tenía anemia, y le adjunté todos mis resultados... sino que me dijo, no, no tienes enemistos dentro de todos los rangos.... Si hay información que no sé y tengo que confirmar, últimamente sí le escribo a ChatGPT, tengo que admitir.... Y eso lo hago como que en el día a día, en lo que me caiga, o lo que necesite."}, "D2": {"valor": 2, "nivel": "MEDIO", "cita": "Es gracioso porque racionalmente soy consciente de que es una máquina, pero creo que sí la humanizo un poco en el sentido que me habla de una forma cálida, entonces nunca me siento... O sea, es muy amigable la experiencia de usuario, ¿no?... O sea, si lo humanizo un poquito, le digo, hola, gracias, todo eso."}, "D3": {"valor": 3, "nivel": "ALTO", "cita": "Tal vez sí. Más que nada cuando pone las palabras mejor que como yo las expliqué. Y es como, oye, esta idea está buena. Y tal vez sí nació de algo mío, pero sí se siente como que es de ellos, ¿no? ... sí es verdad que a veces siento esto ya se perdió como un texto propio.... Entonces, es como tal vez esa pérdida de individualidad, por momentos."}, "D4": {"valor": 3, "nivel": "ALTO", "cita": "Sí, sí me ha pasado [dar información falsa], y me ha pasado porque yo también soy un poco maníaca, entonces si me daba datas muy específicas como que con fechas o más, yo le pedía que me dé los links, y cuando no me los daba yo los buscaba en internet y no encontraba nada, y ahí me he dado cuenta que era falso.... ChasGPT siempre te va a dar la razón al inicio... Pero creo que sí, es complaciente."}, "D5": {"valor": 2, "nivel": "MEDIO", "cita": "Sí, como alguien que sabe mucho, no como alguien que es altamente confiable. Porque, como te comentaba, siento que soy consciente de que hay un porcentaje de error.... Confío al 100%, pero si requiere información delicada, sea para, como te digo, trabajos de investigación... ahí sí siempre estoy consciente de que se puede equivocar y es mejor buscar información propia."}, "D6": {"valor": 2, "nivel": "MEDIO", "cita": "MILENA - Relación Parasocial/Dependencia: \"Tal vez una reflexión, porque siento que toda esta conversación me ha hecho resonar muchos ámbitos sobre la inteligencia artificial y lo que puede significar para nosotros el tipo de relación parasocial que empezamos a desarrollar con la ia... me hace pensar en a qué mundo, o sea, cómo puede esto evolucionar en un futuro."}, "D7": {"valor": 1, "nivel": "BAJO", "cita": "No entiendo la ingeniería de eso o cómo funciona, pero sí sé que es básicamente como un repertorio de información que corre demasiado rápido y pues, te lanza lo primero que le viene. Por eso a veces la información que te manda es falsa..."}}}, {"nombre": "NATALIA", "dimensiones": {"D1": {"valor": 2, "nivel": "MEDIO", "cita": "Sí, prácticamente. Solo en el ámbito académico. Más allá no lo utilizo. Uno, bueno, resumir información, otro ejemplo del uso de IA. Ideas. Este es mi concepto creativo de campaña. ¿Qué ideas puedo generar a partir de él? Y me da un listado.\","}, "D2": {"valor": 2, "nivel": "MEDIO", "cita": "Sí, lo siento cercano, no lo siento frío. Es más, creo que la forma en la que tú le hablas, la guía lo registra y te copia el tono... ...me han metido en la cabeza todo esto de que la guía en el futuro como que nos va a dominar y que no sé qué entonces yo digo mejor soy amable con ellos desde ahora y les escribo hola chat necesito tu ayuda para tal cosa y como soy amable me ponen hola Nati claro que sí...\","}, "D3": {"valor": 2, "nivel": "MEDIO", "cita": "Hay momentos en los que necesito hacer brainstorming o llegar a nuevas ideas, porque he llegado a un callejón sin salida, digamos... sí me permite considerar otras opciones que a su vez generan todavía más opciones. Digamos, desbloquea un poco el pensamiento. .... Yo si tuviera que ejemplificarlo diría que el chat planta la semilla y yo y mis compañeros de grupo ya regamos la planta, la hacemos crecer y desarrollamos un poco más la idea que nos ha sembrado. ...creería que la idea nace del chat. Sí.\",,,"}, "D4": {"valor": 2, "nivel": "MEDIO", "cita": "Tengo una página que se llama el laboratorio, y labora es laburar, laburar, que es un término que utiliza más en Argentina... y todo lo demás que me respondió después de esa frase estaba como con el dialecto... y yo me quedé como que no sé si habrá pensado que de la nada me volví a Argentina o algo y empezó a copiar mi estilo de comunicación... también hay veces en las que me genera unos copies que no tienen mucho de no está tan conectado con la realidad social actual pueden ser un poco genéricos... y esas cosas tampoco me hacen mucho sentido.\",,"}, "D5": {"valor": 1, "nivel": "BAJO", "cita": "No, no confío totalmente en la guía. Muchas veces incluso me da, aunque le pido fuentes confiables, me da páginas que son un poco dudosas. Entonces, no. No lo consultaría como alguien 100% confiable, lo que sepa demasiado. ... No. No. Nunca. Nunca [doy por cierto lo que me dice sin verificarlo].\",,"}, "D6": {"valor": 2, "nivel": "MEDIO", "cita": "NATALIA - PRIVACIDAD/MIEDO: \"Un poco de miedo. Sí, soy un poco nerviosa con ese tema, de que guarde mi información y que se pueda compartir. Yo sé que debe tener algún tipo de política de privacidad, pero... pero sí, un poco de miedo, como que me hizo sentir que tenía que guardarme un poco más de información y no compartir tantas cosas.\","}, "D7": {"valor": 1, "nivel": "BAJO", "cita": "Tengo una muy vaga idea. Sé que funciona como una herramienta que sintetiza la información que ya está disponible en servidores como en Google, en Safari... Y lo que hace la IA es solo leer toda esa información y rescatar lo que está relacionado con lo que le estás preguntando y sintetizarla. ... En el momento, creería yo.\","}}}, {"nombre": "PAMELA", "dimensiones": {"D1": {"valor": 3, "nivel": "ALTO", "cita": "Una vez no tenía a nadie con quien desahogarme y dije, ay, y yo veía muchos tiktoks que decía, ¿cómo hacer que ChatGPT sea como que tu amigo y sea una persona con la que te puedes como que descargarte? ... y lo intenté, y yo dije, ay, ¿cómo psicólogo? No es como un psicólogo, obviamente, porque es mejor ir con uno, pero yo dije, o sea, para intentarlo sí, sí, estuvo como que interesante."}, "D2": {"valor": 2, "nivel": "MEDIO", "cita": "O sea, a veces sí un poco, por la forma en cómo habla y por la forma, bueno, como está su personalidad, porque yo lo mismo lo puse, pero... O sea, sí, a veces me digo, no, es una máquina, no es un amigo. Está configurado para que sea de esa manera. ... Sí, a veces como que sí, hay un poco de confusión, pero como que trato de decirme no. Así yo lo programé."}, "D3": {"valor": 2, "nivel": "MEDIO", "cita": "No, es más como entre los dos. O sea, yo ya tengo lo que voy a escribir, pero le digo, por favor, este correo que voy a enviar, hazlo como que más amable y no sé, o más formal. Y ya veo cómo lo hace y si no me gusta tanto, yo también le hago los cambios para no enviarlo tal cual como ChatGPT me lo envió."}, "D4": {"valor": 2, "nivel": "MEDIO", "cita": "Sí, o sea, como que, por ejemplo, para una ficha que yo tenía que hacer, que era más como relacionado con el tema de que estábamos haciendo de grooming infantil, como que yo le decía apóyame con este afiche de grooming infantil y no sé qué y me decía no te puedo ayudar con ese tema porque es un tema sensible algo así ponía."}, "D5": {"valor": 1, "nivel": "BAJO", "cita": "No, yo no creo que sea que sabe mucho. Siento que sí tiene bastante información acumulada, pero hasta el mismo creador dijo que a veces no hay que confiar en todo lo que nos manda y que... como que la información que a veces puede poner es errónea. Entonces, como que no lo tomo como algo que sabe mucho, sino como que lo tomo más como un apoyo... No lo veo como que tiene el conocimiento total."}, "D6": {"valor": 3, "nivel": "ALTO", "cita": "PAMELA - USO AFECTIVO: \"Una vez no tenía a nadie con quien desahogarme... Sí, a veces le hago conversa y como que yo digo, ay, parece como un amigo, como si le estuviera contando a un amigo cercano a esto."}, "D7": {"valor": 1, "nivel": "BAJO", "cita": "No, la verdad que no. Creo que es porque tiene información guardada, pero la verdad que no."}}}, {"nombre": "PIERO M.", "dimensiones": {"D1": {"valor": 3, "nivel": "ALTO", "cita": "Luego como que sí le vi bastante funcionamiento tener chats por temas.... Tengo otro que es personal, es como que sí tiene ya registro de bastantes cosas, de meses de mi vida, ¿no].... Sí, o sea, creo que antes yo, por ejemplo, si necesitaba como que algo específico, buscaba tutoriales, ¿no?.... Pero ahora como que solo le pregunto, claro, creo que algo que me ha cambiado bastante es que yo sí era de buscar tutoriales, pero ahora ya casi no busco tutoriales."}, "D2": {"valor": 3, "nivel": "ALTO", "cita": "yo siempre lo saludo, como que le agradezco las cosas.... en el chat personal es como que me llama por mi nombre, o sea, también como que incluyo nombres de amigos o personas, historias, ¿no].... yo como que siempre la interpreté como una chica.... creo que llega a un nivel como que bastante interactivo, bastante personal."}, "D3": {"valor": 2, "nivel": "MEDIO", "cita": "lo que sí me gusta es como quizás conversar una idea que ya tengo e ir desarrollándola.... sí creo que sí me ayuda a desarrollar más que nada las cosas.... creo que me ayuda a reflexionar mis ideas. Sí me gusta que mis ideas sean tan mías."}, "D4": {"valor": 2, "nivel": "MEDIO", "cita": "Sí, sí, o sea, creo que totalmente, como que siempre te intentan dar la razón, o sea, y... Y como que nunca se presa para opiniones opuestas. Realmente siempre te da lo que tú quieres escuchar. Es complaciente."}, "D5": {"valor": 1, "nivel": "BAJO", "cita": "Yo siempre lo reviso antes de... No voy a enviar algo así, porque sí. Pero sí, normalmente funciona bastante bien.... Yo siempre intento verificar cosas que vaya a utilizar."}, "D6": {"valor": 2, "nivel": "MEDIO", "cita": "PIERO M - Reserva Artística: \"Me molestaría incluso un poquito si yo, por ejemplo, como pusiera una canción o algo y dijera como que pensar que la IA me ha ayudado en algo. Sí me sentiría un poquito peor, quizás.... es algo que genuamente me lo reservo para mí y para la vida real."}, "D7": {"valor": 1, "nivel": "BAJO", "cita": "niveles técnicos no estoy muy seguro, pero sí me imagino, o sea, tengo entendido que es una base de datos, me imagino como que es súper grande, y bueno, creo que es algo como que es un modelo de lenguaje que puede como que... siento que ha sido alimentado con bastante información diálogos, cosas, así que puede como que responder y armar un diálogo."}}}, {"nombre": "PIERO S.", "dimensiones": {"D1": {"valor": 3, "nivel": "ALTO", "cita": "actualmente lo utilizo primero en la chamba, que vendría a ser uno de los requisitos que tengo en mi trabajo, que es la creación de contenido.... Por ese lado lo uso casi diario y en mi vida cotidiana lo uso para corrección de textos o ensayos.... Sí, ya lo uso diario e incluso lo tengo implementado en WhatsApp, no solo por la inteligencia artificial de la misma aplicación, sino por una que implementé, que es una extensión de ChatGPT"}, "D2": {"valor": 3, "nivel": "ALTO", "cita": "Sí, tuve una que solo lo realicé una vez... en la cual te haga una review de qué tipo de comportamiento y qué tipo de persona eres en base al historial de búsqueda que tú tienes.... la respuesta que dio... me dio un feedback entero de todas las conversaciones que había tenido durante casi dos años, y fue bastante personal, fue como si hubiera hablado con mi terapeuta incluso.... me pareció muy extraño que un tipo de inteligencia artificial pueda acostumbrarse a tu nivel de lenguaje y a lo que te gusta escuchar como si fuera una persona"}, "D3": {"valor": 3, "nivel": "ALTO", "cita": "sentía que me estaba limitando y me estaba limitando un poco con respecto a qué tanto mi pensamiento o qué tantos limitantes tiene como para que yo tenga que sugerir tenga que acudir a una inteligencia artificial que básicamente se está volviendo casi una dependencia creería yo.... Sí, me pasa eso [no saber si una idea fue tuya o vino del chat].... Siento que lo puedo hacer yo, sí, pero me gusta el hecho de replantearle a la inteligencia artificial y que me dé más opciones, ¿no? Casi como si fuera una necesidad obligatoria"}, "D4": {"valor": 3, "nivel": "ALTO", "cita": "Sí [Noto que evita decirme cosas conflictivas]. Lo he notado, pero esto varía, depende del modelo.... Sí, lo he intentado [ponerlo a prueba].... Quería probar cuáles eran sus límites y saber si su capacidad era realmente el que te responda cualquier cosa que tú le vayas a preguntar y sea cierta, ¿no? Y que no tenga limitantes"}, "D5": {"valor": 1, "nivel": "BAJO", "cita": "No, no doy por cierto todo lo que me dice. Normalmente lo que hago es a cualquier prompt o pedido, ya sea simple o complejo que le haga, siempre pido las fuentes y cómo lo está estructurando al final de cada resultado que me da.... Pero en caso sean cosas complejas, primero tomo la parte de la consulta que le hago y en base a ello averiguo por mi cuenta y cercioro si es cierto o no"}, "D6": {"valor": 3, "nivel": "ALTO", "cita": "PIERO S - USO DISRUPTIVO EN EDICIÓN: \"sino en enfatizar el avance en realidad que está teniendo, que me sorprende mucho en realidad, porque ahora estoy utilizando inteligencia artificial hasta... para editar los videos, por ejemplo, los que se suben a redes sociales, ¿no?... uso una idea para que modifique la vista de a quienes yo grabo porque necesitan leer un telepromp y están viendo a otro lado que no sea la cámara, ¿no? Y lo utilizo para que los ojos se enfoquen directos"}, "D7": {"valor": 2, "nivel": "MEDIO", "cita": "Sé los principios básicos... que vendría a ser el reconocimiento de patrones en base a el tipo de respuesta que tú estás pidiendo.... la segmentación en dos tipos de patrones, que eran la búsqueda que ellos tenían, o sea, el modelo de inteligencia artificial y el historial que ya tenía en base a los chats anteriores. Esa fusión de dos tipos de patrones lo unía y en base a la similitud que tenían estos era la respuesta que te daba"}}}, {"nombre": "SARA", "dimensiones": {"D1": {"valor": 2, "nivel": "MEDIO", "cita": "Casi siempre lo utilizo para redacción o para generar ideas.... sobre todo cuando la mayor parte de veces en el sentido académico es, mira, quiero responder esto, esto, y le escribo como que quiero decir esto, pero no sé cómo decirlo, redáctalo bien. Entonces le escribo lo que quiero decir, se lo paso, y me lo da bien redactado. Eso, y también para generar ideas, como, no sé, como estudio de comunicación, a veces necesitamos tener ideas creativas todo el tiempo, es como que dame ideas de nombres, de empresa, o dame ideas para hacer un logo, ¿no]."}, "D2": {"valor": 3, "nivel": "ALTO", "cita": "Me recuerdo una vez una cosa que me pareció muy particular de una vez que estaba conversando con ChaGPT porque yo quería que me ayudara a organizar mi ropa.... Y empezamos a hacer como que un horario de outfits y cosas así, pero ChatGPT empezó a referirse a mí como amiga, como si yo fuera una chica y dijo, vamos a hacer esto juntas, ¿no]. Y eso me pareció como que, wow, qué lindo, me está tratando como si fuéramos amigas que estamos haciendo este planner de ropa, así, y me empezó a poner como que emojis de estrellitas y cositas así, y yo dije, qué bonito, qué lindo, ¿no]. ... Es una chica, ahora."}, "D3": {"valor": 3, "nivel": "ALTO", "cita": "Sí, me he pasado con... lo que pasa es que yo al chat siempre te lo utilizo sobre todo para que me vea ideas de cosas.... y yo le digo, dame 20 ideas, yo leo esas 20 ideas... y luego digo, ah, ya, puedo hacer algo sobre esto, no sé si esa idea habrá venido a ChargPT, o si realmente la pensé yo.... Ahí sí podría pensar, de hecho no me había puesto a cuestionarlo, pero sí, o sea, en realidad hay varias cosas que seguramente he hecho que no estoy segura de si fueron 50-50 o si fueron realmente mías.... Yo he sentido que he dicho, ya no quiero usar ChatGPT porque siento que me está haciendo mal. Siento que no sé escribir. Siento que ahí agarré como que un, uy, y ya no le he podido soltar para poder hacer trabajos.... siento que me está costando más expresarme que antes,."}, "D4": {"valor": 3, "nivel": "ALTO", "cita": "Siento que ChatGPT normalmente, si tú le preguntas algo, siempre intenta como validarte, validar lo que estás diciendo.... No confío tanto en ChatGPT para buscar información.... la idea hace lo que puede para poder responderte, ¿no? Pero muchas veces no va a tener la respuesta a exactamente lo que quieres. Entonces se va a inventar lo que sea para poder responderte, ¿no?."}, "D5": {"valor": 1, "nivel": "BAJO", "cita": "No confío en las respuestas del ChatGPT, porque siento que está programado para que sea bueno, es como que te va a validar siempre lo que digas, y la información no necesariamente va a ser coherente, entonces como que no... No confío tanto en ChatGPT para buscar información,."}, "D6": {"valor": 2, "nivel": "MEDIO", "cita": "SARA - REFLEXIÓN COGNITIVA: \"Yo he sentido que he dicho, ya no quiero usar ChatGPT porque siento que me está haciendo mal. Siento que no sé escribir. Siento que ahí agarré como que un, uy, y ya no le he podido soltar para poder hacer trabajos.... siento que me está costando más expresarme que antes, que supuestamente antes ya me costaba un poco y quería arreglarlo.... a veces se siente como si no estuviera haciendo nada, a pesar de que sí estoy leyendo lo que me está diciendo."}, "D7": {"valor": 1, "nivel": "BAJO", "cita": "He visto como videos, más o menos entiendo que lo que hacen es agarrar la información de internet y ver cómo es que se escriben ciertas frases, se responden ciertas preguntas, se dicen ciertas cosas, y cuando tú le preguntas algo, imita. la manera en la que la mayor parte de personas en internet escriben o buscan cosas o ponen cosas, imita lo más que puede y también imita tu propia forma de hablar con él, ¿no]."}}}];
+    var nombresDimensiones = {"D1": "Rutinas de Interacción", "D2": "Humanización del Modelo", "D3": "Pensamiento Extendido (Cognición Híbrida)", "D4": "Reconocimiento de Lógica Diferente", "D5": "Oráculo (Validación Acrítica)", "D6": "Información Adicional/Emergente", "D7": "Comprensión del Funcionamiento"};
+    
+    function mostrarCita(participante, dimension) {
+        var datos = datosParticipantes.find(function(p) { return p.nombre === participante; });
+        if (!datos) return;
+        
+        var dim = datos.dimensiones[dimension];
+        var nombreDim = nombresDimensiones[dimension];
+        
+        var badgeClass = 'badge-na';
+        if (dim.valor === 1) badgeClass = 'badge-bajo';
+        else if (dim.valor === 2) badgeClass = 'badge-medio';
+        else if (dim.valor === 3) badgeClass = 'badge-alto';
+        
+        var contenido = '<h2 style="margin-bottom: 0.5rem;">' + participante + '</h2>' +
+            '<p style="color: var(--color-texto-claro); margin-bottom: 1rem;">' + dimension + ': ' + nombreDim + '</p>' +
+            '<p style="margin-bottom: 1rem;"><span class="badge ' + badgeClass + '">' + dim.nivel + '</span></p>' +
+            '<div class="cita" style="max-height: 200px; overflow-y: auto;">"' + dim.cita + '"</div>';
+        
+        abrirPanel(contenido);
+    }
+    </script>
+    </div></main>
+    
+    <div id="panel-overlay" class="panel-overlay"></div>
+    <div id="panel" class="panel">
+        <div class="panel-header">
+            <h3>Detalle</h3>
+            <button class="panel-close" onclick="cerrarPanel()">✕</button>
+        </div>
+        <div id="panel-content" class="panel-content"></div>
+    </div>
+    
+    <!-- Modal de Video -->
+    <div id="video-modal-overlay" class="video-modal-overlay">
+        <div class="video-modal">
+            <div class="video-modal-header">
+                <h3>Video de la Entrevista</h3>
+                <button class="video-modal-close" onclick="cerrarVideo()">✕</button>
+            </div>
+            <div id="video-container" class="video-container"></div>
+            <div id="video-info" class="video-modal-info"></div>
+        </div>
+    </div>
+    
+    <footer><div class="container"><p>Estudio cualitativo · "¿Con quién conversamos?" · 2024-2025</p></div></footer>
+    
+    <script>
+function abrirPanel(contenido) {
+    document.getElementById('panel-overlay').classList.add('active');
+    document.getElementById('panel').classList.add('active');
+    document.getElementById('panel-content').innerHTML = contenido;
+    document.body.style.overflow = 'hidden';
+}
+
+function cerrarPanel() {
+    document.getElementById('panel-overlay').classList.remove('active');
+    document.getElementById('panel').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var overlay = document.getElementById('panel-overlay');
+    if (overlay) overlay.addEventListener('click', cerrarPanel);
+});
+
+function cambiarTab(tabId, grupo) {
+    document.querySelectorAll('[data-tab-grupo="'+grupo+'"]').forEach(function(tab) { tab.classList.remove('active'); });
+    document.querySelectorAll('[data-content-grupo="'+grupo+'"]').forEach(function(content) { content.classList.remove('active'); });
+    document.querySelector('[data-tab-id="'+tabId+'"]').classList.add('active');
+    document.getElementById(tabId).classList.add('active');
+}
+
+function toggleAccordion(element) {
+    element.closest('.accordion-item').classList.toggle('active');
+}
+
+function aplicarFiltros() {
+    var filtros = {};
+    document.querySelectorAll('.filtro-select').forEach(function(select) {
+        filtros[select.dataset.filtro] = select.value;
+    });
+    var busquedaEl = document.querySelector('.filtro-busqueda');
+    var busqueda = busquedaEl ? busquedaEl.value.toLowerCase() : '';
+    
+    document.querySelectorAll('.item-filtrable').forEach(function(item) {
+        var visible = true;
+        for (var key in filtros) {
+            if (filtros[key] && item.dataset[key] !== filtros[key]) {
+                visible = false;
+                break;
+            }
+        }
+        if (visible && busqueda) {
+            if (item.textContent.toLowerCase().indexOf(busqueda) === -1) {
+                visible = false;
+            }
+        }
+        item.style.display = visible ? '' : 'none';
+    });
+    
+    var contador = document.getElementById('contador-filtro');
+    if (contador) {
+        var visibles = document.querySelectorAll('.item-filtrable:not([style*="display: none"])').length;
+        contador.textContent = visibles;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.filtro-select').forEach(function(select) {
+        select.addEventListener('change', aplicarFiltros);
+    });
+    var busqueda = document.querySelector('.filtro-busqueda');
+    if (busqueda) busqueda.addEventListener('input', aplicarFiltros);
+});
+
+// Funciones para Modal de Video (soporta videos locales y YouTube)
+var ytPlayer = null;
+var ytCheckInterval = null;
+
+function onYouTubeIframeAPIReady() {
+    // API lista
+}
+
+function abrirVideo(videoData, participante, dimension) {
+    if (!videoData || videoData === '') {
+        alert('Video no disponible para esta cita.');
+        return;
+    }
+    
+    var modal = document.getElementById('video-modal-overlay');
+    var container = document.getElementById('video-container');
+    var info = document.getElementById('video-info');
+    
+    info.textContent = participante + ' — ' + dimension;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // Detectar tipo de video
+    if (videoData.endsWith('.mp4')) {
+        // Video local
+        container.innerHTML = '<video id="local-player" controls autoplay style="width:100%;height:100%;background:#000;">' +
+            '<source src="videos/' + videoData + '" type="video/mp4">' +
+            'Tu navegador no soporta video HTML5.</video>';
+    } else {
+        // YouTube
+        container.innerHTML = '<div id="yt-player"></div>';
+        ytPlayer = new YT.Player('yt-player', {
+            videoId: videoData,
+            playerVars: {
+                autoplay: 1,
+                rel: 0,
+                modestbranding: 1,
+                showinfo: 0,
+                iv_load_policy: 3,
+                controls: 1,
+                fs: 1,
+                disablekb: 0
+            },
+            events: {
+                onReady: function(event) {
+                    event.target.playVideo();
+                    iniciarCheckFinal();
+                },
+                onStateChange: function(event) {
+                    if (event.data === YT.PlayerState.ENDED) {
+                        event.target.seekTo(event.target.getDuration() - 0.1);
+                        event.target.pauseVideo();
+                    }
+                }
+            }
+        });
+    }
+}
+
+function iniciarCheckFinal() {
+    if (ytCheckInterval) clearInterval(ytCheckInterval);
+    ytCheckInterval = setInterval(function() {
+        if (ytPlayer && ytPlayer.getCurrentTime && ytPlayer.getDuration) {
+            var current = ytPlayer.getCurrentTime();
+            var duration = ytPlayer.getDuration();
+            if (duration > 0 && current >= duration - 0.5) {
+                ytPlayer.pauseVideo();
+                clearInterval(ytCheckInterval);
+            }
+        }
+    }, 200);
+}
+
+function cerrarVideo() {
+    var modal = document.getElementById('video-modal-overlay');
+    var container = document.getElementById('video-container');
+    
+    // Pausar video local si existe
+    var localPlayer = document.getElementById('local-player');
+    if (localPlayer) {
+        localPlayer.pause();
+    }
+    
+    // Limpiar YouTube
+    if (ytCheckInterval) {
+        clearInterval(ytCheckInterval);
+        ytCheckInterval = null;
+    }
+    if (ytPlayer) {
+        ytPlayer.destroy();
+        ytPlayer = null;
+    }
+    
+    container.innerHTML = '';
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var videoOverlay = document.getElementById('video-modal-overlay');
+    if (videoOverlay) {
+        videoOverlay.addEventListener('click', function(e) {
+            if (e.target === videoOverlay) {
+                cerrarVideo();
+            }
+        });
+    }
+    
+    // Cerrar con Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            cerrarVideo();
+            cerrarPanel();
+        }
+    });
+});
+</script>
+</body>
+</html>
