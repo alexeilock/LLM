@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hallazgo Central | ¿Con quién conversamos?</title>
+    <title>Hallazgo Central | ¿Con quién hablamos?</title>
     <script src="https://www.youtube.com/iframe_api"></script>
     <style>
 :root {
@@ -122,11 +122,39 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
 .matriz-container { overflow-x: auto; }
 .matriz { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
 .matriz th, .matriz td { padding: 0.75rem; text-align: center; border: 1px solid var(--color-borde); }
-.matriz th { background: var(--color-primario); color: white; font-weight: 600; }
+.matriz th { background: var(--color-primario); color: white; font-weight: 600; position: relative; }
+.matriz th.dimension-header { cursor: pointer; transition: background 0.2s; }
+.matriz th.dimension-header:hover { background: var(--color-secundario); }
 .matriz td.participante { text-align: left; font-weight: 600; background: #F8FAFC; }
 .matriz td.celda { cursor: pointer; transition: transform 0.2s; }
 .matriz td.celda:hover { transform: scale(1.1); box-shadow: 0 0 10px rgba(0,0,0,0.2); z-index: 10; position: relative; }
 .celda-valor { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 6px; color: white; font-weight: 600; }
+
+/* Tooltip personalizado para dimensiones */
+.dimension-tooltip {
+    position: fixed;
+    background: white;
+    border: 2px solid var(--color-primario);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 1000;
+    max-width: 400px;
+    display: none;
+    pointer-events: none;
+}
+.dimension-tooltip.active { display: block; }
+.dimension-tooltip-titulo {
+    font-weight: 700;
+    color: var(--color-primario);
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+.dimension-tooltip-texto {
+    color: var(--color-texto);
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
 
 .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
 .tab { padding: 0.75rem 1.5rem; background: white; border: 2px solid var(--color-borde); border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
@@ -163,7 +191,7 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
 <body>
     <header>
         <div class="container">
-            <h1>¿Con quién conversamos?</h1>
+            <h1>¿Con quién hablamos?</h1>
             <nav><ul><li><a href="index.html" class="">Inicio</a></li>
 <li><a href="01_matriz.html" class="">Matriz</a></li>
 <li><a href="02_dimensiones.html" class="">Dimensiones</a></li>
@@ -330,7 +358,7 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
         </div>
     </div>
     
-    <footer><div class="container"><p>Estudio cualitativo · "¿Con quién conversamos?" · 2024-2025</p></div></footer>
+    <footer><div class="container"><p>Estudio cualitativo · "¿Con quién hablamos?" · 2024-2025</p></div></footer>
     
     <script>
 function abrirPanel(contenido) {

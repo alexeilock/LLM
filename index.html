@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio | ¿Con quién conversamos?</title>
+    <title>Inicio | ¿Con quién hablamos?</title>
     <script src="https://www.youtube.com/iframe_api"></script>
     <style>
 :root {
@@ -122,11 +122,39 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
 .matriz-container { overflow-x: auto; }
 .matriz { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
 .matriz th, .matriz td { padding: 0.75rem; text-align: center; border: 1px solid var(--color-borde); }
-.matriz th { background: var(--color-primario); color: white; font-weight: 600; }
+.matriz th { background: var(--color-primario); color: white; font-weight: 600; position: relative; }
+.matriz th.dimension-header { cursor: pointer; transition: background 0.2s; }
+.matriz th.dimension-header:hover { background: var(--color-secundario); }
 .matriz td.participante { text-align: left; font-weight: 600; background: #F8FAFC; }
 .matriz td.celda { cursor: pointer; transition: transform 0.2s; }
 .matriz td.celda:hover { transform: scale(1.1); box-shadow: 0 0 10px rgba(0,0,0,0.2); z-index: 10; position: relative; }
 .celda-valor { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 6px; color: white; font-weight: 600; }
+
+/* Tooltip personalizado para dimensiones */
+.dimension-tooltip {
+    position: fixed;
+    background: white;
+    border: 2px solid var(--color-primario);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 1000;
+    max-width: 400px;
+    display: none;
+    pointer-events: none;
+}
+.dimension-tooltip.active { display: block; }
+.dimension-tooltip-titulo {
+    font-weight: 700;
+    color: var(--color-primario);
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+.dimension-tooltip-texto {
+    color: var(--color-texto);
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
 
 .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
 .tab { padding: 0.75rem 1.5rem; background: white; border: 2px solid var(--color-borde); border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
@@ -163,7 +191,7 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
 <body>
     <header>
         <div class="container">
-            <h1>¿Con quién conversamos?</h1>
+            <h1>¿Con quién hablamos?</h1>
             <nav><ul><li><a href="index.html" class="active">Inicio</a></li>
 <li><a href="01_matriz.html" class="">Matriz</a></li>
 <li><a href="02_dimensiones.html" class="">Dimensiones</a></li>
@@ -178,14 +206,14 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
     <main><div class="container">
     <section style="text-align: center; padding: 3rem 0;">
         <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, var(--color-primario), var(--color-secundario)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-            ¿Con quién satisfactor conversamos?
+            ¿Con quién hablamos?
         </h1>
-        <p style="font-size: 1.25rem; color: var(--color-texto-claro);">Humanización de modelos de lenguaje en estudiantes de comunicación</p>
+        <p style="font-size: 1.25rem; color: var(--color-texto-claro);">Humanización de modelos de lenguaje entre estudiantes de comunicación</p>
     </section>
     
     <section class="card">
         <p style="font-size: 1.1rem; text-align: center; max-width: 800px; margin: 0 auto;">
-            20 estudiantes universitarios de comunicación fueron entrevistados sobre sus experiencias con ChatGPT y otros modelos de lenguaje. Sus respuestas fueron codificadas en 7 dimensiones de análisis, generando 140 citas textuales que revelan cómo los usuarios construyen su relación con la IA.
+            20 estudiantes universitarios de comunicación fueron entrevistados sobre sus experiencias con ChatGPT y otros modelos de lenguaje. Sus respuestas fueron codificadas en 7 dimensiones de análisis, generando 140 citas textuales que revelan cómo los usuarios construyen su relación con la IA: no conversan con una máquina ni con una persona, sino con una entidad conversacional artificial experimentada como interlocutor dentro de un marco diseñado para facilitar ese modo de relación.
         </p>
     </section>
     
@@ -206,22 +234,22 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
     <section style="margin: 3rem 0;">
         <h2 style="text-align: center; margin-bottom: 2rem;">Hallazgos Principales</h2>
         <div class="grid grid-2">
-            <div class="card"><h3 style="color: var(--color-primario);">🎯 El conocimiento mitiga la ilusión de estar interactuando con otro como uno: vuelve al LLM máquina otra vez.</h3><p>d = 1.28 (efecto grande). Los participantes con alta comprensión técnica humanizan menos.</p></div>
-            <div class="card"><h3 style="color: var(--color-primario);">🧠 Pero no elimina la ilusión de tratar con otro como uno mismo. El lenguaje en el que se basan los LLM construyen un pacto ficcional.</h3><p>Incluso quienes entienden tokens y predicción siguen experimentando "relación" y la "Humanización" con la IA.</p></div>
-            <div class="card"><h3 style="color: var(--color-primario);">📊 Ni explica la varianza</h3><p>Sara y Cristina tienen la misma comprensión técnica (baja), experiencias diferentes, hasta opuestas, pero ambas humanizan al IA.</p></div>
-            <div class="card"><h3 style="color: var(--color-primario);">👥 5 tipos de usuarios</h3><p>Humanizadores Intuitivos (45%), Pragmáticos Distantes (30%), Escépticos, Técnicos Reflexivos, e Híbrido Informado.</p></div>
+            <div class="card"><h3 style="color: var(--color-primario);">🎯 El conocimiento técnico mitiga la humanización, pero no la elimina</h3><p>d = 1.28 (efecto grande). Los participantes con alta comprensión técnica humanizan menos, pero incluso quienes entienden tokens y predicción siguen experimentando "relación" con la IA.</p></div>
+            <div class="card"><h3 style="color: var(--color-primario);">🧠 La suspensión de la incredulidad es arquitectónicamente inducida</h3><p>A diferencia de la ficción tradicional donde es un acto deliberado, en los LLM la interfaz conversacional difumina los límites entre elección consciente y respuesta automática al formato de diálogo.</p></div>
+            <div class="card"><h3 style="color: var(--color-primario);">📊 Paradoja de la humanización crítica</h3><p>Quienes más antropomorfizan al modelo suelen ser también los más críticos respecto a sus deficiencias y limitaciones técnicas. El conocimiento no elimina la experiencia relacional.</p></div>
+            <div class="card"><h3 style="color: var(--color-primario);">👥 Patrones de interacción diferenciados</h3><p>Los usuarios no solo difieren en cuánto humanizan, sino en cómo integran el LLM en sus procesos cognitivos, cómo validan su información y cómo reconocen su lógica diferente.</p></div>
         </div>
     </section>
     
     <section class="grid grid-2" style="margin: 3rem 0;">
         <div class="card" style="border: 2px solid var(--color-primario);">
             <h3>📚 Panorama General</h3>
-            <p style="margin: 1rem 0;">Explora el estudio completo: todos los participantes, todas las dimensiones, todas las citas.</p>
+            <p style="margin: 1rem 0;">Explora el estudio completo: todos los participantes, todas las dimensiones, todas las citas. Comprende la arquitectura completa de la investigación.</p>
             <a href="01_matriz.html" class="btn btn-primary">Comenzar recorrido →</a>
         </div>
         <div class="card" style="border: 2px solid var(--color-secundario);">
             <h3>🎯 Hallazgo Central</h3>
-            <p style="margin: 1rem 0;">Ve directo al análisis D2×D7: el rol del conocimiento técnico en la humanización.</p>
+            <p style="margin: 1rem 0;">Ve directo al análisis D2×D7: el rol del conocimiento técnico en la humanización y la suspensión de la incredulidad.</p>
             <a href="04_perfiles.html" class="btn btn-secondary">Ir al hallazgo →</a>
         </div>
     </section>
@@ -248,7 +276,7 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
         </div>
     </div>
     
-    <footer><div class="container"><p>Estudio cualitativo · "¿Con quién conversamos?" · 2024-2025</p></div></footer>
+    <footer><div class="container"><p>Estudio cualitativo · "¿Con quién hablamos?" · 2024-2025</p></div></footer>
     
     <script>
 function abrirPanel(contenido) {
