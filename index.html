@@ -186,6 +186,33 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
 
 .progress-bar { height: 8px; background: var(--color-borde); border-radius: 4px; overflow: hidden; margin: 0.5rem 0; }
 .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+
+/* Tooltip personalizado para gráfico SVG */
+.svg-tooltip {
+    position: fixed;
+    background: rgba(26, 32, 44, 0.95);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.2s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+.svg-tooltip.active {
+    opacity: 1;
+}
+.punto-participante {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.punto-participante:hover {
+    r: 6;
+    opacity: 1 !important;
+}
 </style>
 </head>
 <body>
@@ -227,7 +254,7 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
     <section class="card" style="background: linear-gradient(135deg, #F8FAFC, #EDF2F7);">
         <div class="cita" style="font-size: 1.25rem; border-left-width: 6px;">
             "Yo personalmente sé que es un modelo de tokens... pero yo lo siento como asistente que se adapta a lo que necesitas."
-            <span class="cita-autor">— Adrián</span>
+            <span class="cita-autor">— Nicolás</span>
         </div>
     </section>
     
@@ -276,7 +303,13 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
         </div>
     </div>
     
-    <footer><div class="container"><p>Estudio cualitativo · "¿Con quién hablamos?" · 2024-2025</p></div></footer>
+    <footer><div class="container">
+        <p>Estudio cualitativo · "¿Con quién hablamos?" · 2024-2025</p>
+        <p style="font-size: 0.875rem; color: var(--color-texto-claro); margin-top: 0.5rem;">
+            Datos y videos anonimizados mediante IA (Stable Diffusion + ControlNet) para protección de identidad. 
+            <a href="06_metodologia.html" style="color: var(--color-primario); text-decoration: underline;">Ver detalles →</a>
+        </p>
+    </div></footer>
     
     <script>
 function abrirPanel(contenido) {
@@ -461,6 +494,30 @@ document.addEventListener('DOMContentLoaded', function() {
             cerrarVideo();
             cerrarPanel();
         }
+    });
+    
+    // Tooltip para puntos del gráfico SVG
+    var tooltip = document.createElement('div');
+    tooltip.className = 'svg-tooltip';
+    document.body.appendChild(tooltip);
+    
+    var puntos = document.querySelectorAll('.punto-participante');
+    puntos.forEach(function(punto) {
+        punto.addEventListener('mouseenter', function(e) {
+            var nombre = this.getAttribute('data-nombre');
+            var tipo = this.getAttribute('data-tipo');
+            tooltip.textContent = nombre + ' - ' + tipo;
+            tooltip.classList.add('active');
+        });
+        
+        punto.addEventListener('mousemove', function(e) {
+            tooltip.style.left = (e.clientX + 15) + 'px';
+            tooltip.style.top = (e.clientY + 15) + 'px';
+        });
+        
+        punto.addEventListener('mouseleave', function() {
+            tooltip.classList.remove('active');
+        });
     });
 });
 </script>

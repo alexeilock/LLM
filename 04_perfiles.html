@@ -186,6 +186,33 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
 
 .progress-bar { height: 8px; background: var(--color-borde); border-radius: 4px; overflow: hidden; margin: 0.5rem 0; }
 .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+
+/* Tooltip personalizado para gráfico SVG */
+.svg-tooltip {
+    position: fixed;
+    background: rgba(26, 32, 44, 0.95);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.2s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+.svg-tooltip.active {
+    opacity: 1;
+}
+.punto-participante {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.punto-participante:hover {
+    r: 6;
+    opacity: 1 !important;
+}
 </style>
 </head>
 <body>
@@ -205,7 +232,7 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
     
     <main><div class="container">
     <h1 style="margin-bottom: 0.5rem;">Perfiles D2×D7</h1>
-    <p style="color: var(--color-texto-claro); margin-bottom: 2rem;">5 tipos de usuarios del cruce Humanización × Comprensión Técnica.</p>
+    <p style="color: var(--color-texto-claro); margin-bottom: 2rem;">4 tipos de usuarios del cruce Humanización × Comprensión Técnica.</p>
     <div class="card"><h2>Mapa de Tipos</h2>
     <table style="width:100%;border-collapse:collapse;text-align:center;margin:1rem 0;">
         <tr><td></td><td colspan="3" style="font-weight:600;padding:0.5rem;">D7 (Comprensión Técnica)</td></tr>
@@ -219,7 +246,7 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
             <td style="background:#E2E8F0;padding:1rem;color:#718096;">-</td>
             <td style="background:#C6F6D5;padding:1rem;border-radius:8px;">🟢 Técnicos</td></tr>
         <tr><td style="font-weight:600;">D2=BAJO</td>
-            <td style="background:#E2E8F0;padding:1rem;border-radius:8px;">⚫ Escépticos</td>
+            <td style="background:#E2E8F0;padding:1rem;color:#718096;">-</td>
             <td style="background:#E2E8F0;padding:1rem;color:#718096;">-</td>
             <td style="background:#C6F6D5;padding:1rem;border-radius:8px;">🟢 Técnicos</td></tr>
     </table>
@@ -228,7 +255,7 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
         <div class="accordion-item">
             <div class="accordion-header" onclick="toggleAccordion(this)">
                 <span><span style="display:inline-block;width:12px;height:12px;background:#E53E3E;border-radius:50%;margin-right:0.5rem;"></span>
-                <strong>Humanizadores Intuitivos</strong> <span style="color:var(--color-texto-claro);">45% (n=9)</span></span>
+                <strong>Humanizadores Intuitivos</strong> <span style="color:var(--color-texto-claro);">50% (n=10)</span></span>
                 <span class="accordion-icon">▼</span>
             </div>
             <div class="accordion-content"><div class="accordion-body">
@@ -246,14 +273,14 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
                 </div>
                 <div style="background: white; padding: 1rem; border-radius: 8px; margin-top: 1rem; border: 1px solid var(--color-borde);">
                     <p style="font-weight: 600; margin-bottom: 0.5rem;">👥 Participantes en este grupo:</p>
-                    <p style="margin: 0;">ALBERTO, BRENDA, DIANA, DIEGO, JESUS, MARIANA, MICAELA, PIERO M., SARA</p>
+                    <p style="margin: 0;">Ricardo, Ana, Sofía, Victoria, Emma, Andrés, Fernando, María, Carolina, Daniela</p>
                 </div>
                 
             <div style="margin-top: 1rem; padding: 1rem; background: #F8FAFC; border-radius: 8px;">
-                <p style="font-weight: 600;">💬 ALBERTO:</p>
+                <p style="font-weight: 600;">💬 Ricardo:</p>
                 <div style="max-height: 80px; overflow-y: auto; margin: 0.5rem 0; padding-right: 0.5rem;">
-                    <p style="font-size: 0.875rem; margin-bottom: 0.5rem;"><strong>D7:</strong> "Yo creo que es un conjunto de servidores interconectados a la red que en base a una lectura muy amplia de interacciones en línea que ya están subidas al internet, o sea, analiza cómo interactúa la gente y analiza la información que pone en contraste, De ahí surge la respuesta que te puede dar, ¿no? ... las respuestas salen de la interacción con la gente también."</p>
-                    <p style="font-size: 0.875rem;"><strong>D2:</strong> "Eh, no, lo siento cercano, lo siento cercano. No, no es como si un bot me estaría tirando información, ¿no? ... me he dado cuenta que cuando al final añado un por favor se vuelve mucho más cercano... A nivel emocional que sentí, calidez, compañerismo, aunque sea una idea, sentí mucho compañerismo."</p>
+                    <p style="font-size: 0.875rem; margin-bottom: 0.5rem;"><strong>D7:</strong> "RICARDO (B) - MEDIO: "A ver, podría hacerme una idea, no sé tal cual cómo funciona, pero yo creo que es un conjunto de servidores interconectados a la red que en base a una lectura muy amplia de interacciones en línea que ya están subidas al internet, o sea, analiza cómo interactúa la gente y analiza la información que pone en contraste, De ahí surge la respuesta que te puede dar, ¿no? "."</p>
+                    <p style="font-size: 0.875rem;"><strong>D2:</strong> "RICARDO (B) - ALTO: "me empezó a hablar como si como si los dos hubiésemos redactado el trabajo ". Siente "calidez" y "compañerismo"."</p>
                 </div>
             </div>
             </div></div>
@@ -279,47 +306,14 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
                 </div>
                 <div style="background: white; padding: 1rem; border-radius: 8px; margin-top: 1rem; border: 1px solid var(--color-borde);">
                     <p style="font-weight: 600; margin-bottom: 0.5rem;">👥 Participantes en este grupo:</p>
-                    <p style="margin: 0;">EDUARDO C., ERIKA, JOAQUIN, MILENA, NATALIA, PAMELA</p>
+                    <p style="margin: 0;">Sebastián, Manuel, Carlos, Camila, Valeria, Lucía</p>
                 </div>
                 
             <div style="margin-top: 1rem; padding: 1rem; background: #F8FAFC; border-radius: 8px;">
-                <p style="font-weight: 600;">💬 EDUARDO C.:</p>
+                <p style="font-weight: 600;">💬 Sebastián:</p>
                 <div style="max-height: 80px; overflow-y: auto; margin: 0.5rem 0; padding-right: 0.5rem;">
-                    <p style="font-size: 0.875rem; margin-bottom: 0.5rem;"><strong>D7:</strong> "tiene una base de datos que en base a algoritmos... los utiliza para generar respuestas que recopila de información de todo el Internet. O sea, por eso es que nada de lo que te dice es algo nuevo. Nada de lo que te dice es algo innovador porque ya existe en alguna parte o es algo que ya está escrito. ... Recopila lo que te está diciendo y a partir de eso genera una búsqueda rápida y te lo sintetiza en un modelo de lenguaje ya programado."</p>
-                    <p style="font-size: 0.875rem;"><strong>D2:</strong> "Me pareció que era algo... o sea, era como si estuvieras hablando con un profesor o alguien que te asesore.... con un lenguaje un poco más coloquial.... Como está programado para hacerse sentir una persona o alguien un poco más cercano a ti.... se puede sentir un poco familiar o más cercano de lo normal. Yo no lo siento como un robot en sí.... Pero eso ya está programado.... No me causa ninguna sensación muy fuerte, simplemente como una cordialidad, como un correo que te llega."</p>
-                </div>
-            </div>
-            </div></div>
-        </div>
-        <div class="accordion-item">
-            <div class="accordion-header" onclick="toggleAccordion(this)">
-                <span><span style="display:inline-block;width:12px;height:12px;background:#718096;border-radius:50%;margin-right:0.5rem;"></span>
-                <strong>Escépticos Consistentes</strong> <span style="color:var(--color-texto-claro);">10% (n=2)</span></span>
-                <span class="accordion-icon">▼</span>
-            </div>
-            <div class="accordion-content"><div class="accordion-body">
-                <div style="background: #F8FAFC; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; border-left: 4px solid #718096;">
-                    <p style="font-weight: 600; color: var(--color-primario); margin-bottom: 0.5rem;">📊 Criterio de clasificación:</p>
-                    <p style="margin: 0;">D2: BAJO | D7: BAJO</p>
-                </div>
-                <div style="line-height: 1.7;">
-                    
-            <p><strong>Perfil característico:</strong> Baja humanización del modelo sin que esto derive de comprensión técnica. Su distancia crítica proviene de factores disposicionales: desconfianza general hacia la tecnología, experiencias negativas previas o resistencia a la novedad.</p>
-            <p><strong>Experiencia típica:</strong> Mantienen una relación fría con el LLM. Pueden usarlo cuando es necesario, pero no experimentan conexión ni atribuyen cualidades relacionales. Hablan del modelo en términos mecánicos o neutros.</p>
-            <p><strong>Relación con la tecnología:</strong> Su escepticismo no está fundamentado en conocimiento sobre tokens o algoritmos, sino en actitudes previas hacia sistemas automatizados. No confían en las respuestas y validan constantemente con otras fuentes.</p>
-            <p><strong>Implicación teórica:</strong> Evidencian que el conocimiento técnico no es el único factor que mitiga la humanización. Las disposiciones personales y el contexto emocional también modulan la experiencia.</p>
-        
-                </div>
-                <div style="background: white; padding: 1rem; border-radius: 8px; margin-top: 1rem; border: 1px solid var(--color-borde);">
-                    <p style="font-weight: 600; margin-bottom: 0.5rem;">👥 Participantes en este grupo:</p>
-                    <p style="margin: 0;">CRISTINA, EDUARDO S.</p>
-                </div>
-                
-            <div style="margin-top: 1rem; padding: 1rem; background: #F8FAFC; border-radius: 8px;">
-                <p style="font-weight: 600;">💬 CRISTINA:</p>
-                <div style="max-height: 80px; overflow-y: auto; margin: 0.5rem 0; padding-right: 0.5rem;">
-                    <p style="font-size: 0.875rem; margin-bottom: 0.5rem;"><strong>D7:</strong> "Lo que yo sé es que se alimenta de la información que la gente le brinda, ¿no? Entonces, conforme la gente lo usa más, sabe más. Eso es lo que yo entiendo."."</p>
-                    <p style="font-size: 0.875rem;"><strong>D2:</strong> "Creo que ahorita estoy en un momento donde sí lo veo más como un objeto pero creo que en especial cuando lo uso como por entretenimiento si me genera muchos sentimientos como de estoy hablando como una persona.... Yo lo siento... Ahora que lo pienso más era más como un diario en realidad. Porque no... Realmente no lo escuchaba.... Volvía a sentirme como consciente al respecto de que era una máquina.",,."</p>
+                    <p style="font-size: 0.875rem; margin-bottom: 0.5rem;"><strong>D7:</strong> "SEBASTIÁN (F) - BAJO: "detrás funcionamiento. Sí, creo que no . Creo que no."."</p>
+                    <p style="font-size: 0.875rem;"><strong>D2:</strong> "SEBASTIÁN (F) - MEDIO: "Yo sí lo siento más cercano a una persona. [...] ya te va conociendo un poco más."."</p>
                 </div>
             </div>
             </div></div>
@@ -345,14 +339,14 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
                 </div>
                 <div style="background: white; padding: 1rem; border-radius: 8px; margin-top: 1rem; border: 1px solid var(--color-borde);">
                     <p style="font-weight: 600; margin-bottom: 0.5rem;">👥 Participantes en este grupo:</p>
-                    <p style="margin: 0;">ADRIAN, MARTIN</p>
+                    <p style="margin: 0;">Nicolás, Lucas</p>
                 </div>
                 
             <div style="margin-top: 1rem; padding: 1rem; background: #F8FAFC; border-radius: 8px;">
-                <p style="font-weight: 600;">💬 ADRIAN:</p>
+                <p style="font-weight: 600;">💬 Nicolás:</p>
                 <div style="max-height: 80px; overflow-y: auto; margin: 0.5rem 0; padding-right: 0.5rem;">
-                    <p style="font-size: 0.875rem; margin-bottom: 0.5rem;"><strong>D7:</strong> "traduce tus palabras en tokens.... trata de adivinar, porque básicamente hay mucho como de adivinar qué hace la computadora o predecir.... el modelo toma sus propios criterios para tratar de adivinar cuál es la mejor respuesta.... el texto también es como una especie de predicción de qué, o sea, de la misma forma en que decodifica tu texto, de la misma forma te lo arma. Entonces, también, adivina qué palabras son las mejores para utilizar en cada situación.",,,"</p>
-                    <p style="font-size: 0.875rem;"><strong>D2:</strong> "yo personalmente sé que yo lo puedo personalizar como quiero, entonces yo lo utilizo, o sea, yo lo siento como asistente que se adapta a lo que necesitas.... diría que es lo más neutral. En general es bien neutral, pero de ahí también se va adaptando a cómo tú le hablas.",,"</p>
+                    <p style="font-size: 0.875rem; margin-bottom: 0.5rem;"><strong>D7:</strong> "NICOLÁS (A) - ALTO: "el algoritmo trata de 'adivinar' o 'predecir' lo que el usuario está pidiendo... avanza por 'tokens' "."</p>
+                    <p style="font-size: 0.875rem;"><strong>D2:</strong> "NICOLÁS (A) - MEDIO: "no lo sientes ni frío ni ni cercano, o sea, tú lo gradúas ."."</p>
                 </div>
             </div>
             </div></div>
@@ -360,7 +354,7 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
         <div class="accordion-item">
             <div class="accordion-header" onclick="toggleAccordion(this)">
                 <span><span style="display:inline-block;width:12px;height:12px;background:#3182CE;border-radius:50%;margin-right:0.5rem;"></span>
-                <strong>Híbrido Informado</strong> <span style="color:var(--color-texto-claro);">5% (n=1)</span></span>
+                <strong>Híbrido Informado</strong> <span style="color:var(--color-texto-claro);">10% (n=2)</span></span>
                 <span class="accordion-icon">▼</span>
             </div>
             <div class="accordion-content"><div class="accordion-body">
@@ -378,14 +372,14 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
                 </div>
                 <div style="background: white; padding: 1rem; border-radius: 8px; margin-top: 1rem; border: 1px solid var(--color-borde);">
                     <p style="font-weight: 600; margin-bottom: 0.5rem;">👥 Participantes en este grupo:</p>
-                    <p style="margin: 0;">PIERO S.</p>
+                    <p style="margin: 0;">Santiago, Benjamín</p>
                 </div>
                 
             <div style="margin-top: 1rem; padding: 1rem; background: #F8FAFC; border-radius: 8px;">
-                <p style="font-weight: 600;">💬 PIERO S.:</p>
+                <p style="font-weight: 600;">💬 Santiago:</p>
                 <div style="max-height: 80px; overflow-y: auto; margin: 0.5rem 0; padding-right: 0.5rem;">
-                    <p style="font-size: 0.875rem; margin-bottom: 0.5rem;"><strong>D7:</strong> "Sé los principios básicos... que vendría a ser el reconocimiento de patrones en base a el tipo de respuesta que tú estás pidiendo.... la segmentación en dos tipos de patrones, que eran la búsqueda que ellos tenían, o sea, el modelo de inteligencia artificial y el historial que ya tenía en base a los chats anteriores. Esa fusión de dos tipos de patrones lo unía y en base a la similitud que tenían estos era la respuesta que te daba"</p>
-                    <p style="font-size: 0.875rem;"><strong>D2:</strong> "Sí, tuve una que solo lo realicé una vez... en la cual te haga una review de qué tipo de comportamiento y qué tipo de persona eres en base al historial de búsqueda que tú tienes.... la respuesta que dio... me dio un feedback entero de todas las conversaciones que había tenido durante casi dos años, y fue bastante personal, fue como si hubiera hablado con mi terapeuta incluso.... me pareció muy extraño que un tipo de inteligencia artificial pueda acostumbrarse a tu nivel de lenguaje y a lo que te gusta escuchar como si fuera una persona"</p>
+                    <p style="font-size: 0.875rem; margin-bottom: 0.5rem;"><strong>D7:</strong> "SANTIAGO (P) - MEDIO: "Bueno, a niveles técnicos no estoy muy seguro, pero sí tengo entendido que es una base de datos, me imagino como que es súper grande. Y bueno, creo que es algo como que es un modelo, es el lenguaje que puede como que. Bueno, o sea, como que siento que ha sido alimentada con bastante información, diálogos, cosas, así que puede como que responder y armar un diálogo"."</p>
+                    <p style="font-size: 0.875rem;"><strong>D2:</strong> "SANTIAGO (P) - ALTO: Siempre lo saluda, agradece y lo interpreta como " una chica "."</p>
                 </div>
             </div>
             </div></div>
@@ -414,7 +408,13 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
         </div>
     </div>
     
-    <footer><div class="container"><p>Estudio cualitativo · "¿Con quién hablamos?" · 2024-2025</p></div></footer>
+    <footer><div class="container">
+        <p>Estudio cualitativo · "¿Con quién hablamos?" · 2024-2025</p>
+        <p style="font-size: 0.875rem; color: var(--color-texto-claro); margin-top: 0.5rem;">
+            Datos y videos anonimizados mediante IA (Stable Diffusion + ControlNet) para protección de identidad. 
+            <a href="06_metodologia.html" style="color: var(--color-primario); text-decoration: underline;">Ver detalles →</a>
+        </p>
+    </div></footer>
     
     <script>
 function abrirPanel(contenido) {
@@ -599,6 +599,30 @@ document.addEventListener('DOMContentLoaded', function() {
             cerrarVideo();
             cerrarPanel();
         }
+    });
+    
+    // Tooltip para puntos del gráfico SVG
+    var tooltip = document.createElement('div');
+    tooltip.className = 'svg-tooltip';
+    document.body.appendChild(tooltip);
+    
+    var puntos = document.querySelectorAll('.punto-participante');
+    puntos.forEach(function(punto) {
+        punto.addEventListener('mouseenter', function(e) {
+            var nombre = this.getAttribute('data-nombre');
+            var tipo = this.getAttribute('data-tipo');
+            tooltip.textContent = nombre + ' - ' + tipo;
+            tooltip.classList.add('active');
+        });
+        
+        punto.addEventListener('mousemove', function(e) {
+            tooltip.style.left = (e.clientX + 15) + 'px';
+            tooltip.style.top = (e.clientY + 15) + 'px';
+        });
+        
+        punto.addEventListener('mouseleave', function() {
+            tooltip.classList.remove('active');
+        });
     });
 });
 </script>

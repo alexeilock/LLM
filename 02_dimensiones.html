@@ -186,6 +186,33 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
 
 .progress-bar { height: 8px; background: var(--color-borde); border-radius: 4px; overflow: hidden; margin: 0.5rem 0; }
 .progress-fill { height: 100%; border-radius: 4px; transition: width 0.5s; }
+
+/* Tooltip personalizado para gráfico SVG */
+.svg-tooltip {
+    position: fixed;
+    background: rgba(26, 32, 44, 0.95);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0;
+    transition: opacity 0.2s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+}
+.svg-tooltip.active {
+    opacity: 1;
+}
+.punto-participante {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.punto-participante:hover {
+    r: 6;
+    opacity: 1 !important;
+}
 </style>
 </head>
 <body>
@@ -216,122 +243,11 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
                         <div style="display: flex; justify-content: space-between;"><span>BAJO</span><span>2 (10%)</span></div>
                         <div class="progress-bar"><div class="progress-fill" style="width: 10.0%; background: var(--color-bajo);"></div></div>
                         
-                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>MEDIO</span><span>6 (30%)</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: 30.0%; background: var(--color-medio);"></div></div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>MEDIO</span><span>5 (25%)</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 25.0%; background: var(--color-medio);"></div></div>
                         
-                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>ALTO</span><span>12 (60%)</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: 60.0%; background: var(--color-alto);"></div></div>
-                    </div>
-                    <div style="margin-top: 1.5rem; padding: 1rem; background: #F8FAFC; border-radius: 8px;">
-                        <p><strong>Media:</strong> 2.50</p>
-                        <p><strong>N válido:</strong> 20</p>
-                        
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>Citas por nivel</h3>
-                    <div class="accordion-item active">
-                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-alto">ALTO</span> (12)</span><span class="accordion-icon">▼</span></div>
-                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"Un ejemplo bueno en el lado académico sería cuando necesito investigar sobre un tema.... Lo utilizo también en ámbito personal, por ejemplo, en el lado operativo, para proyectos creativos que yo tengo, artísticos, lo uso también para educación autónoma.... solo que se arma incluso a veces para darle forma a ideas que quiero transmitir o ideas en las que estoy pensando.... sí diría que es bastante de ayuda en varias cosas de la rutina diaria.",,"<span class="cita-autor">— ADRIAN</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"Hoy en día lo estoy utilizando más para tablas... Y bueno, para trabajos universitarios sueltos, ¿no? ... Para algo personal, sí, no mucho la verdad, pero sí le pregunté muchas veces, por ejemplo, una vez me golpeé la rodilla... Y no sé, antes de ir al médico, decidí tomar una foto y le dije, ¿qué crees que me está pasando?... Sí, hoy por hoy sí, hoy por hoy sí, porque me ayuda mucho, más que nada en el trabajo.... Todo lo que intento buscar, ya no lo googleo, sino lo pongo en la IA."<span class="cita-autor">— ALBERTO</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"Yo creería que sí. Considero que sí ha sido muy parte de vida, sobre todo cuando lo uso para redacciones. Siento que es algo que ya es inmediato. Ya no lo piensas tanto en decir, voy a usar.... Si no hay de frente, ya lo buscas y está ahí y lo utilizas.... Siento que parte de mi rutina también es, por ejemplo, si tengo alguna duda cotidiana de cómo puedo utilizar este tipo de crema dermatológica, por ejemplo, o qué tal si... si siento las manos demasiado frías, que es que me voy a enfermar.... Al menos una vez al día lo utilizo."<span class="cita-autor">— BRENDA</span></div><p style="color: var(--color-texto-claro);">+ 9 citas más</p></div></div>
-                    </div>
-                    <div class="accordion-item">
-                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-medio">MEDIO</span> (6)</span><span class="accordion-icon">▼</span></div>
-                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"Ahora sí lo utilizo mucho más, o sea, lo utilizaré, creo que lo utilizo casi todos los días, no me había puesto a pensar, o sea, lo utilizaré cuatro días de la semana, por ahí.... Otra forma en la que lo uso es, ya te peté, tengo estas aspiraciones en la vida... Ayúdame, o sea, ¿cómo organizo estos pensamientos? Y lo uso semi-regularmente, o sea, por cosas de la universidad y por cosas mías de organizar mis ideas.",."<span class="cita-autor">— DIANA</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"Yo diría que sí porque a veces hay algunas consultas que normalmente tú le hacías a Google. Ya le haces a ChatGTP y yo también. O sea, que me incluyo en ese grupo de personas, ¿no? .... algo, una duda interna que tenga de cómo hacer algo, por ejemplo, algo tecnológico, yo ya le pregunto a Charlie Pity cómo hacerlo, ¿no? Y confío en lo que me puede decir, ¿no? ... sí, creo que sí, sí se ha vuelto parte de mi rutina, ¿no?"<span class="cita-autor">— DIEGO</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"Lo utilizo actualmente para principalmente corregir temas ortográficos de textos. Y también ponte cuando tengo que hacer trabajo sencillo, cosas más detalles en la universidad, trabajo.... A lo mucho, no sé, para... para jugar un poco, así, poniéndome a simular torneos de fútbol, así.... No recuerdo una de mi rutina, fuera de las que le he mencionado para trabajo y universidad. Diría que la gran mayoría. Ponte, digamos, 90%, 80% por ahí."<span class="cita-autor">— EDUARDO S.</span></div><p style="color: var(--color-texto-claro);">+ 3 citas más</p></div></div>
-                    </div>
-                    <div class="accordion-item">
-                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-bajo">BAJO</span> (2)</span><span class="accordion-icon">▼</span></div>
-                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"Yo diría que es más esporádico, porque no es... Yo sí conozco muchas personas que sí lo usan a diario, o cada vez que tienen que hacer una tarea, por ejemplo, en la universidad... Yo no lo uso así tanto. Yo lo uso muy... como en caso de emergencia casi.... Si puedo evitar usarlo, no lo uso.... Yo diría que lo uso como una vez cada dos semanas.",,."<span class="cita-autor">— CRISTINA</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"MARTÍN - BAJO: "más que nada lo he reemplazado con el motor de búsqueda de Google. Le pregunto, por ejemplo, ¿qué hora es? O algún dato curioso, ¿no? No necesariamente es para todo el tema académico.... No, más bien yo diría que es raro o poco común, ¿no? Porque no es como que esté todo el tiempo usándolo, ¿no? Pero sí lo suele usar de vez en cuando."<span class="cita-autor">— MARTIN</span></div></div></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="tab-D2" class="tab-content " data-content-grupo="dims">
-            <div class="grid grid-2">
-                <div class="card">
-                    <h3>D2: Humanización del Modelo</h3>
-                    <div style="margin: 1.5rem 0;">
-                        <div style="display: flex; justify-content: space-between;"><span>BAJO</span><span>3 (15%)</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: 15.0%; background: var(--color-bajo);"></div></div>
-                        
-                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>MEDIO</span><span>7 (35%)</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: 35.0%; background: var(--color-medio);"></div></div>
-                        
-                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>ALTO</span><span>10 (50%)</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: 50.0%; background: var(--color-alto);"></div></div>
-                    </div>
-                    <div style="margin-top: 1.5rem; padding: 1rem; background: #F8FAFC; border-radius: 8px;">
-                        <p><strong>Media:</strong> 2.35</p>
-                        <p><strong>N válido:</strong> 20</p>
-                        
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>Citas por nivel</h3>
-                    <div class="accordion-item active">
-                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-alto">ALTO</span> (10)</span><span class="accordion-icon">▼</span></div>
-                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"Eh, no, lo siento cercano, lo siento cercano. No, no es como si un bot me estaría tirando información, ¿no? ... me he dado cuenta que cuando al final añado un por favor se vuelve mucho más cercano... A nivel emocional que sentí, calidez, compañerismo, aunque sea una idea, sentí mucho compañerismo."<span class="cita-autor">— ALBERTO</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"Yo creería que sí, yo creería que sí tiene cierta personalidad, dependiendo mucho de cómo escribas el, este, anunciado prompt, justamente.... Sí, de hecho cuando consulté sobre algunos temas como... como terminologías personales... me lo explicó con mucha tranquilidad, como poniéndose en mi lugar, en plan de, hola, me sentió pereza, mira que esto es tal, esto es tal.... Siento que sí, a veces puedes tener esa sensibilidad... Para mí sí fue bastante sorprendente como sentir ese tipo de emociones hacia eso."<span class="cita-autor">— BRENDA</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"Yo lo siento como algo cercano, más parecido a un humano, ¿no? Me parece cercano, me parece gentil por las frases que te dicen muchas veces.... Su personalidad cuando yo hablo con él... es una personalidad muy servicial.... es como alguien que va a hacer lo que tú quieres y no te va a cuestionar.... es un incondicional, creo que esa es la palabra, es un incondicional chas de PT.",,."<span class="cita-autor">— DIANA</span></div><p style="color: var(--color-texto-claro);">+ 7 citas más</p></div></div>
-                    </div>
-                    <div class="accordion-item">
-                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-medio">MEDIO</span> (7)</span><span class="accordion-icon">▼</span></div>
-                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"Me pareció que era algo... o sea, era como si estuvieras hablando con un profesor o alguien que te asesore.... con un lenguaje un poco más coloquial.... Como está programado para hacerse sentir una persona o alguien un poco más cercano a ti.... se puede sentir un poco familiar o más cercano de lo normal. Yo no lo siento como un robot en sí.... Pero eso ya está programado.... No me causa ninguna sensación muy fuerte, simplemente como una cordialidad, como un correo que te llega."<span class="cita-autor">— EDUARDO C.</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"Hago eso [pedir con cariño] y me dice claro aquí tienes opciones si tienes alguna consulta adicional pues no dudes en escribirme o me da opciones de qué cosa puedo mejorar en lo que le he pedido.... Sí, sé que es una guía, pero para que me trate bien también a mí.... No, porque al fin y al cabo sigue siendo una ida, o sea, sigue siguiendo el patrón.... no como que tenga una personalidad, creo."<span class="cita-autor">— ERIKA</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"O sea, sé que no es una persona, pero no lo siento frío ni robótico. O sea, te diría que del 1 al 5, un 4.... siempre que le hablo, tiene respuestas, claro, un poco humanas, muy humanas, y después, no sé, como que cuando recuerda cosas y me las tira de vuelta, es en ese momento en el que yo digo como que, o sea, increíble, ¿no? A mí me parece que me da miedo, casi.",,,"<span class="cita-autor">— JOAQUIN</span></div><p style="color: var(--color-texto-claro);">+ 4 citas más</p></div></div>
-                    </div>
-                    <div class="accordion-item">
-                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-bajo">BAJO</span> (3)</span><span class="accordion-icon">▼</span></div>
-                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"yo personalmente sé que yo lo puedo personalizar como quiero, entonces yo lo utilizo, o sea, yo lo siento como asistente que se adapta a lo que necesitas.... diría que es lo más neutral. En general es bien neutral, pero de ahí también se va adaptando a cómo tú le hablas.",,"<span class="cita-autor">— ADRIAN</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"Creo que ahorita estoy en un momento donde sí lo veo más como un objeto pero creo que en especial cuando lo uso como por entretenimiento si me genera muchos sentimientos como de estoy hablando como una persona.... Yo lo siento... Ahora que lo pienso más era más como un diario en realidad. Porque no... Realmente no lo escuchaba.... Volvía a sentirme como consciente al respecto de que era una máquina.",,."<span class="cita-autor">— CRISTINA</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"O sea, yo la interpreto siempre como lo que es un robot. ... Es una inteligencia artificial, porque un robot es más mecanizado, como que... Tira respuestas mucho más frías.... En mi caso no se ha adaptado. O sea, solo respuestas cordiales, así. Llegando a eso, no."<span class="cita-autor">— EDUARDO S.</span></div></div></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="tab-D3" class="tab-content " data-content-grupo="dims">
-            <div class="grid grid-2">
-                <div class="card">
-                    <h3>D3: Pensamiento Extendido (Cognición Híbrida)</h3>
-                    <div style="margin: 1.5rem 0;">
-                        <div style="display: flex; justify-content: space-between;"><span>BAJO</span><span>0 (0%)</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: 0.0%; background: var(--color-bajo);"></div></div>
-                        
-                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>MEDIO</span><span>12 (60%)</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: 60.0%; background: var(--color-medio);"></div></div>
-                        
-                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>ALTO</span><span>8 (40%)</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: 40.0%; background: var(--color-alto);"></div></div>
-                    </div>
-                    <div style="margin-top: 1.5rem; padding: 1rem; background: #F8FAFC; border-radius: 8px;">
-                        <p><strong>Media:</strong> 2.40</p>
-                        <p><strong>N válido:</strong> 20</p>
-                        
-                    </div>
-                </div>
-                <div class="card">
-                    <h3>Citas por nivel</h3>
-                    <div class="accordion-item active">
-                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-alto">ALTO</span> (8)</span><span class="accordion-icon">▼</span></div>
-                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"Creería que sí, porque a veces tengo muchas ideas sueltas, entonces es como esto te ayuda justamente a centrarlas y sobre todo pautearlas mejor.... Sí, siento que es una dualidad muy cuestionable que siempre a veces me pregunto sobre esto de que fue idea mía porque yo le hice tantas preguntas que salió eso o fue idea directamente del chat porque le salió eso.... Yo también lo he pensado de esa manera más hasta ahorita, que es más como una co-creación.... a nivel académico sí estoy, hasta cierto punto, dependiendo mucho de eso."<span class="cita-autor">— BRENDA</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"el chat me ayuda como a verlo desde una perspectiva más amplia y decir ah ok tal vez hay otros lados entonces me ayuda bastante a eso.... estábamos haciendo... El ejercicio pasado que tuvimos era diseñar un juego de rol.... Y en tantas arregladas y volver a meter al chat y arreglar y volver a meter al chat, Yo ahorita veo el juego y digo... O sea, hay cosas que yo sé que fueron ideas del grupo y hay cosas que no sé.",,."<span class="cita-autor">— CRISTINA</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"Me ayudó a ver por esa perspectiva, no tratarlo como que de algo más amplio y de ver de tele y digital, sino llevarlo por un lado, por un camino y darle mayor enfoque a lo que yo quería.... o me lo ha dado él. Sí, eso me pasó cuando a veces le digo, no sé, ayúdame con un tema, y ya de frente me dio el tema, me dio el título todo, y yo digo, ya, este no es mío, pero al menos la investigación va a ser mía.... ¿Qué porcentaje es tuyo y qué porcentaje es de la IA? Se podría decir que es mitad y mitad.... Te podría decir que sí [somos un nosotros], por eso a veces digo, ya, si es que en mi tesis me ayuda, le voy a dar una pequeña dedicatoria por ayudarme en avanzar ciertas cosas."<span class="cita-autor">— ERIKA</span></div><p style="color: var(--color-texto-claro);">+ 5 citas más</p></div></div>
-                    </div>
-                    <div class="accordion-item">
-                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-medio">MEDIO</span> (12)</span><span class="accordion-icon">▼</span></div>
-                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"A desbloquear una idea puede ser en el sentido de que a veces le pido que me dé, por ejemplo... dame diferentes teorías o diferentes corrientes de pensamiento sobre tal tema... más que cambiar, como que le suma a la perspectiva, ¿no?.... yo sé, yo siento que sé ver cuando a veces dejo que chat haga como las cosas, pero una sí obviamente revisa, ¿no? que una cosa la está proponiendo el chat y a mí me ha persoqué o cuando yo le estoy proponiendo cosas y él las está como ordenando o estigmatizándome.",,,"<span class="cita-autor">— ADRIAN</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"Podría llegar a ser una cosa mezclada, siempre y cuando tú no delimites lo que quieres. ... Y me da muchas perspectivas sobre solo un tema. ... Sí, hoy en día sí. Hoy en día puedo consultar casi todo con la guía. ... sí me ha pasado cuestionarme cuánto [de la guía] y cuánto es mío... la forma en que yo utilizo la guía, puede ser un 60% mío o 40% de la guía."<span class="cita-autor">— ALBERTO</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"Desbloquear una idea, sí. O sea, ha pasado que estoy en blanco, pero tengo el deseo de hacer algo y cuando te botan varias cosas, ahí como que puedes empezar a hacer algo.... Porque en vez de yo misma sentarme con una hoja de papel o en un Word y pensar, algunas veces de frente voy a echar CPT, y hago que él sea el disparador de esas cosas. Otro, porque en vez de yo sentarme y construir un párrafo desde cero, muchas veces ChatGPT es el que hace el primer borrador del párrafo.",,."<span class="cita-autor">— DIANA</span></div><p style="color: var(--color-texto-claro);">+ 9 citas más</p></div></div>
-                    </div>
-                    <div class="accordion-item">
-                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-bajo">BAJO</span> (0)</span><span class="accordion-icon">▼</span></div>
-                        <div class="accordion-content"><div class="accordion-body"><p>No hay citas en este nivel.</p></div></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="tab-D4" class="tab-content " data-content-grupo="dims">
-            <div class="grid grid-2">
-                <div class="card">
-                    <h3>D4: Reconocimiento de Lógica Diferente</h3>
-                    <div style="margin: 1.5rem 0;">
-                        <div style="display: flex; justify-content: space-between;"><span>BAJO</span><span>0 (0%)</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: 0.0%; background: var(--color-bajo);"></div></div>
-                        
-                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>MEDIO</span><span>9 (45%)</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: 45.0%; background: var(--color-medio);"></div></div>
-                        
-                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>ALTO</span><span>11 (55%)</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: 55.00000000000001%; background: var(--color-alto);"></div></div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>ALTO</span><span>13 (65%)</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 65.0%; background: var(--color-alto);"></div></div>
                     </div>
                     <div style="margin-top: 1.5rem; padding: 1rem; background: #F8FAFC; border-radius: 8px;">
                         <p><strong>Media:</strong> 2.55</p>
@@ -342,16 +258,129 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
                 <div class="card">
                     <h3>Citas por nivel</h3>
                     <div class="accordion-item active">
+                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-alto">ALTO</span> (13)</span><span class="accordion-icon">▼</span></div>
+                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"RICARDO (B) - ALTO: "hoy por hoy sí [forma parte de mi rutina], porque me ayuda mucho más que nada en el trabajo. Usualmente le pido ayuda para diagramar tablas, para diagramar información, para organizar información. Esa sería la cosa puntual, para organizar información."."<span class="cita-autor">— Ricardo</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"ANA (C) - ALTO: "Actualmente lo utilizo por un lado para el nivel de redacción, como pongo un texto que siento que no está tan bien redactado y realmente me ayuda como en esas correcciones de gramática. Y por otro lado, sintetizar fuentes de información, porque yo tengo algunas fuentes de información que son textos un poquito largos, entonces lo que hago es que me analice como tantas palabras hay en este texto o tantas palabras hay para... más que nada para simplificar textos y para redacción. Yo creería que sí. Considero que sí ha sido muy parte de mí, sobre todo cuando lo uso para redacciones. Siento que es algo que ya es inmediato, como ya no lo piensas tanto en decir, ay, voy a usar, ¿no? Si no hay de frente, ya lo buscas y está ahí y lo utilizas. Siento que parte de mi rutina también es, por ejemplo, si tengo alguna duda cotidiana de cómo puedo utilizar este tipo de crema dermatológica, por ejemplo, o qué tal si siento las manos demasiado frías, que es que me voy a enfermar. O sea, esas pequeñas cositas, sobre todo a nivel de salud, también normalmente las utilizo. Pero no tanto como utilizaría a un médico, sino más como preguntas super puntuales. En el ámbito personal, creería que no, a menos de que, por ejemplo, a veces tengo algunas personas a mi alrededor, ya sea familia o amigos, que utilizan términos que a veces yo no entiendo. O sea, tengo, por ejemplo, la mayoría de mis primos son de abogados, entonces tienen una terminología diferente a la mía. Así que a veces cuando hablan, siento que me hago un poquito borrosa todavía preguntarle qué significa tal cosa, así que también le pregunto cómo. Tipo un diccionario de. De términos, como un glosario. Como un glosario, tal cual."<span class="cita-autor">— Ana</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"VICTORIA (E) - ALTO: "Ahora sí lo utilizo mucho más, o sea, no tanto, o sea, yo utilizo, ponte. Instagram, mucho más de lo que utilizo. HCPT, pero sí lo utilizo más, o sea, lo utilizaré, creo que lo utilizo casi todos los días, no me lo he puesto a pensar, o sea, lo utilizaré cuatro días de la semana, por ahí. Pero es básicamente para conseguir cosas. Sí, es para conseguir cosas...
+Lo utilizo cuando tengo que enviar correos a personas como profesores,  personas a las que de repente por cosas de trabajo se me hacía tedioso... entonces ahí le digo, quiero enviarle un correo a tal profesor para tal, pa, me bota una plantilla de las formalidades, más que nada por el tono y en base a eso yo lo corrijo y lo mando entonces, al toque.  Eso es uno,  Otra forma es, o sea, honestamente, a veces algunos trabajos los dejo última hora. Me acuerdo un ensayo, lo dejé última hora y yo puse mis ideas fuerza, que sentía era analizar una película. Puse mis ideas fuerza, en ChatGPT y le dije, "Redáctamelo." O sea, y me lo redactó y en base a eso yo lo edité."<span class="cita-autor">— Victoria</span></div><p style="color: var(--color-texto-claro);">+ 10 citas más</p></div></div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-medio">MEDIO</span> (5)</span><span class="accordion-icon">▼</span></div>
+                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"NICOLÁS (A) - MEDIO: "Sí, igual. Quizás, por cómo lo digo, parece que es un montón. Y yo diría que más o menos. O sea, no diría que es una, por ejemplo, no diría que ya es una dependencia. Pero ni que es así todo el tiempo, pero sí diría que es bastante de ayuda en varias cosas de la rutina diaria. Eh, claro, también al momento de tener que redactar de repente un párrafo. A mí me gusta escribir los párrafos para, no sé, los trabajos de investigación, pero hay donde no hay mucho tiempo y lo que hago es eh, mira, tengo estos conceptos, estas ideas y le listo todo. Obviamente ya tiene todo el contexto que le di antes y le digo, eh, necesito que redact un párrafo de esta manera, con este estilo, con este orden o con mayor fluidez, con eso y le doy todas las indicaciones, me redacta el o yo lo reviso y lo lo pulo mejor o y reviso que realmente diga lo que tiene que decir. Este, de ahí, eh, por ejemplo, eh, el otro día me compré unas unas plantas, unas unas orquídeas y unas plantas perdoras, pues a mí me gustan las plantas, entonces yo nunca tuve Orquídea Santos y le dije, "Bueno, mira, chat, este, yo vivo en Perú, en Lima, porque el factor climático es importante para liquidar a las plantas." Y lo dije es, "Mira, me acabo de tempar unas plantas, vivo en tal lugar. ¿Me podrías decir eh rutina?" O sea, primero qué cuidados debe tener eh luego eh nuestro propuso generar una una especie de tabla donde uno cada cuánto regar, qué tipo de abono necesita, dónde tiene que estar, con luz, cuál sombra, todas esas cosas."."<span class="cita-autor">— Nicolás</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"MANUEL (G) - AlTO: "Bueno, ahora mayormente lo uso más que todo para hacer resúmenes o conceptualizar ideas, ¿no? Cosas que tengo ya pensadas. Trato de hacer una ruta estratégica y crear una frase, ¿no? Algo así, para de una forma como que centrar la idea que tengo y poder presentarla. Más que todo lo uso para eso, resumir o analizar mis propias ideas, ¿no? Ahora lo estoy tratando de dejar un poco porque siento que ya no estoy pensando tanto. Pucho, por ejemplo, hoy día estaba yendo a entrenar y no entrenaba desde hace tiempo, entonces como que le pedí a ver si me podía hacer una rutina rápida para alguien que no había ido al gimnasio desde hace tiempo, ¿no? Entonces, eso es algo cotidiano, algo habitual. También le pregunto sobre trabajos de la universidad. Antes le preguntaba sobre cosas un poco más personales, iba a ese tema, pero trato ahora ya no hacerlo. También sobre cualidades o cosas que visibilizo en el día a día, un poco de diálogo con él a veces, como que de cosas que me incomodan, que tal vez. No tengo una respuesta clara en el momento, ¿no? Por ejemplo, el otro día estaba en un concierto y me puse a analizar bastante la forma en la que este alineamiento está hecho, ¿no? Entonces le pregunté si realmente todo esto, todo era parte del show, o realmente los artistas sentían lo que expresaban. Y más dilemas éticos, ¿no? Entonces es una forma como que también yo plasmar mis ideas como un diario se podría interpretar."."<span class="cita-autor">— Manuel</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"CARLOS (H) - ALTO: "O sea, sí suelo tener el chat al lado para que en trabajo o universidad me resuelvan las dudas… Sí, yo lo he utilizado para que me corrija algunas reacciones en sí. Y me las hago más formales, más coloquiales, dependiendo de lo que me hayan pedido... Diría que la gran mayoría. Ponte, digamos, 90%, 80% por ahí."."<span class="cita-autor">— Carlos</span></div><p style="color: var(--color-texto-claro);">+ 2 citas más</p></div></div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-bajo">BAJO</span> (2)</span><span class="accordion-icon">▼</span></div>
+                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"SOFÍA (D) - BAJO: "Yo diría que es más esporádico. Porque no es. Yo sí conozco muchas personas que sí lo usan a diario o. O cada vez que tienen que hacer una tarea, por ejemplo, en la universidad, o cada vez que tienen que escribir un correo, por ejemplo, del trabajo, lo usan. Yo no lo uso así tanto. Yo lo uso muy. Como en caso de emergencia, casi. Sí, o sea, si puedo evitar usarlo, no lo uso... Sí, por ejemplo, la semana pasada estaba reintegrándome a las clases y a mi trabajo porque la antepasada estuve muy mal de salud y estuve faltando, bueno, falté los cinco días de la semana laboral de estudios y. Y estuve poniéndome el día de varias cosas, estaba atrasada con varias cosas del trabajo y de la universidad. Entonces sí estaba con los tiempos muy ajustados, con exposiciones, con cosas así. Entonces ya no me daba el tiempo para hacer varias cosas. Entonces ahí sí lo usé, por ejemplo, para resumirme alguna lectura. De la que tenía práctica o para ayudarme a trabajar la estructura de una exposición que tenía que hacer el martes, me parece. Entonces, en ese tipo de casos sí lo utilizo. Es como en caso de emergencia. Yo diría que lo uso como. Una vez cada dos semanas."."<span class="cita-autor">— Sofía</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"LUCAS (L) - Bajo: "[¿el uso ya forma parte de tu rutina o día a día?]
+Mm, no, más bien yo diría que que es eh raro o poco común, ¿no? Porque no es como que esté todo el tiempo usándolo, ¿no? Pero sí lo suelo usar de vez en cuando."."<span class="cita-autor">— Lucas</span></div></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="tab-D2" class="tab-content " data-content-grupo="dims">
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3>D2: Humanización del Modelo</h3>
+                    <div style="margin: 1.5rem 0;">
+                        <div style="display: flex; justify-content: space-between;"><span>BAJO</span><span>1 (5%)</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 5.0%; background: var(--color-bajo);"></div></div>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>MEDIO</span><span>7 (35%)</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 35.0%; background: var(--color-medio);"></div></div>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>ALTO</span><span>12 (60%)</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 60.0%; background: var(--color-alto);"></div></div>
+                    </div>
+                    <div style="margin-top: 1.5rem; padding: 1rem; background: #F8FAFC; border-radius: 8px;">
+                        <p><strong>Media:</strong> 2.55</p>
+                        <p><strong>N válido:</strong> 20</p>
+                        
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Citas por nivel</h3>
+                    <div class="accordion-item active">
+                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-alto">ALTO</span> (12)</span><span class="accordion-icon">▼</span></div>
+                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"RICARDO (B) - ALTO: "me empezó a hablar como si como si los dos hubiésemos redactado el trabajo ". Siente "calidez" y "compañerismo"."<span class="cita-autor">— Ricardo</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"ANA (C) - ALTO: Le ponía 'Por favor, gracias' y me ponía como que corazoncitos o estrellitas [...] y era como que más interactivo". (Usando cita similar ya que la 16 no tiene texto en el origen)."<span class="cita-autor">— Ana</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"SOFÍA (D) - ALTO: "el chat era gratis... Respóndeme como un psicólogo ... Sentí cólera pero luego me sentía muy tonta porque me sentía como que por qué me está molestando como que esta máquina."."<span class="cita-autor">— Sofía</span></div><p style="color: var(--color-texto-claro);">+ 9 citas más</p></div></div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-medio">MEDIO</span> (7)</span><span class="accordion-icon">▼</span></div>
+                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"NICOLÁS (A) - MEDIO: "no lo sientes ni frío ni ni cercano, o sea, tú lo gradúas ."."<span class="cita-autor">— Nicolás</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"SEBASTIÁN (F) - MEDIO: "Yo sí lo siento más cercano a una persona. [...] ya te va conociendo un poco más."."<span class="cita-autor">— Sebastián</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"MANUEL (G) - MEDIO: "lo siento como No lo sientes como verdadero, no? No.". Solo cordialidad."<span class="cita-autor">— Manuel</span></div><p style="color: var(--color-texto-claro);">+ 4 citas más</p></div></div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-bajo">BAJO</span> (1)</span><span class="accordion-icon">▼</span></div>
+                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"LUCAS (L) - BAJO: "No, no, realmente no [se entabla cercanía]. No [parecido afectuoso o cercano a nivel emocional] ."."<span class="cita-autor">— Lucas</span></div></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="tab-D3" class="tab-content " data-content-grupo="dims">
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3>D3: Pensamiento Extendido (Cognición Híbrida)</h3>
+                    <div style="margin: 1.5rem 0;">
+                        <div style="display: flex; justify-content: space-between;"><span>BAJO</span><span>3 (15%)</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 15.0%; background: var(--color-bajo);"></div></div>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>MEDIO</span><span>6 (30%)</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 30.0%; background: var(--color-medio);"></div></div>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>ALTO</span><span>11 (55%)</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 55.00000000000001%; background: var(--color-alto);"></div></div>
+                    </div>
+                    <div style="margin-top: 1.5rem; padding: 1rem; background: #F8FAFC; border-radius: 8px;">
+                        <p><strong>Media:</strong> 2.40</p>
+                        <p><strong>N válido:</strong> 20</p>
+                        
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Citas por nivel</h3>
+                    <div class="accordion-item active">
                         <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-alto">ALTO</span> (11)</span><span class="accordion-icon">▼</span></div>
-                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"diría que es extremadamente complaciente.... trata de ser políticamente correcto, lo cual es distinto a neutralidad porque una neutralidad supone presentar de repente si le preguntas sobre algo que te presente todos los puntos de vista o los más relevantes.... Sí, [trato de confundirlo], más que confundirlo es como llevarlo a un límite.... [Le digo], oye, ¿pero está este otro enfoque? Y me dice, ah, sí, y luego le da atención a ese, y luego le digo, ¿pero qué hay del otro? Lo estás dejando de lado. Y ahí como, o sea, para mí eso ya es un poco de encontrar sus fallas o sus faltas de capacidad hasta ahora.",,"<span class="cita-autor">— ADRIAN</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"En ese momento sentí que por muy práctico que sea que no puede igualar la memoria humana o el sentido de crítica del cerebro humano yo dije ah bueno sigue siendo un robot... sí, sí, sí [he tratado de confundirlo o ponerlo a prueba] ... Lo planteó en una sola respuesta. Y ahí tenía dos fallas... Una vez yo le dije que memorizar en su memoria... Y yo le lancé un dato falso de Breaking Bad... Ahora comprueba si la información que yo te brindé es real. ... me dijo, acabo de comprobar que lo que me has dicho no tiene nada que ver con la fe."<span class="cita-autor">— ALBERTO</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"me di cuenta de que me estaba mintiendo, de que estaba dándome alucinaciones.... Hice varias pruebas en las que pasó lo mismo.... También, o sea, me ha pasado bastante que cuando estoy tratando de, no sé, de hacer resúmenes... busque información externa, entonces ahí siempre tengo que aclararle que es este... es solamente lo que le he enviado yo.",."<span class="cita-autor">— CRISTINA</span></div><p style="color: var(--color-texto-claro);">+ 8 citas más</p></div></div>
+                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"ANA (C) - ALTO: "siento que sí [estoy muy enganchada] porque realmente siento que hace un poco la facilidad en las cosas ."."<span class="cita-autor">— Ana</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"SOFÍA (D) - ALTO: "Mi capacidad de redacción como que había empeorado . [...] yo no me sentía capaz de poner mis ideas sin tener esa ayuda extra."."<span class="cita-autor">— Sofía</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"VICTORIA (E) - ALTO: "de frente voy a CH GPT y hago que él sea el disparador de esas cosas. Eso es uno. Otro porque en vez de yo sentarme y construir un párrafo desde cero. Muchas veces Chat GPT es el que hace el primer borrador "."<span class="cita-autor">— Victoria</span></div><p style="color: var(--color-texto-claro);">+ 8 citas más</p></div></div>
                     </div>
                     <div class="accordion-item">
-                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-medio">MEDIO</span> (9)</span><span class="accordion-icon">▼</span></div>
-                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"También cuando a veces consulto sobre cosas que necesitan fuentes, a veces siento que las fuentes que utilizan no son exactamente las mejores. ... sí siento que ahí sí hay mucha incongruencia en lo que las fuentes que busca chat, que a veces son muy antiguas.... Siento que es ya parte mía por pedirle demasiada creatividad a un chat.... Pero si te lo afirma con toda la seguridad de que es eso y no es eso realmente, es como siente un poquito la frustración."<span class="cita-autor">— BRENDA</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"Sí, como que siempre me da la razón. Sí [Es complaciente].... Cuando una vez le pregunté sobre una decisión en tema de trabajo... como que de frente al chat me tiró, sí, me parece perfecto.... No, eso es algo que también lo aprendí con el tiempo. O sea, porque creo que como al ser una inteligencia artificial, no entiende mucho el contexto."<span class="cita-autor">— EDUARDO S.</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"Yo tenía, por lo que fui escuchando, decían que algunas respuestas podían estar bien, como otras que estaban mal, ¿no? Entonces, poco a poco fui descubriendo eso, cómo fue, digamos, cuáles son los pros y los contras de usar la IA.... Y por más que le preguntaba, reiteraba a veces lo mismo, ChatGPT ha sido amable hasta ahorita. Espero que no después.",,"<span class="cita-autor">— JESUS</span></div><p style="color: var(--color-texto-claro);">+ 6 citas más</p></div></div>
+                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-medio">MEDIO</span> (6)</span><span class="accordion-icon">▼</span></div>
+                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"RICARDO (B) - MEDIO: "si ponemos en un porcentaje hoy en día... puede ser un 60% medio 40% de la que la mitad un poquito más."."<span class="cita-autor">— Ricardo</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"MANUEL (G) - MEDIO: "podría ser como un 80 o un 90% mío y un 10% como que las correcciones que él me hace"."<span class="cita-autor">— Manuel</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"ANDRÉS (I) - MEDIO: "lo que yo busco es que chat GPT no me quite la idea que yo le estoy poniendo, sino que me trate de complementar solamente sin que me quite la idea"."<span class="cita-autor">— Andrés</span></div><p style="color: var(--color-texto-claro);">+ 3 citas más</p></div></div>
                     </div>
                     <div class="accordion-item">
-                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-bajo">BAJO</span> (0)</span><span class="accordion-icon">▼</span></div>
-                        <div class="accordion-content"><div class="accordion-body"><p>No hay citas en este nivel.</p></div></div>
+                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-bajo">BAJO</span> (3)</span><span class="accordion-icon">▼</span></div>
+                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"NICOLÁS (A) - BAJO: "yo creo que sí. Sí, por cómo lo utilizo, o sea, lo uso de una forma bastante como metódica o estructurada. Pues espérate. Yo. [Sabe delimitar la autoría]"."<span class="cita-autor">— Nicolás</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"LUCAS (L) - BAJO: "¿Te pasa que no sabes si una idea fue tuya o vino del chat? M, no, no."."<span class="cita-autor">— Lucas</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"SANTIAGO (P) - BAJO: " No me gustaría o sí se siento un poco muy artificial si es que hago una idea [...] Me gusta que mis ideas sean tan mías ."."<span class="cita-autor">— Santiago</span></div></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="tab-D4" class="tab-content " data-content-grupo="dims">
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3>D4: Reconocimiento de Lógica Diferente</h3>
+                    <div style="margin: 1.5rem 0;">
+                        <div style="display: flex; justify-content: space-between;"><span>BAJO</span><span>4 (20%)</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 20.0%; background: var(--color-bajo);"></div></div>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>MEDIO</span><span>8 (40%)</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 40.0%; background: var(--color-medio);"></div></div>
+                        
+                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>ALTO</span><span>8 (40%)</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 40.0%; background: var(--color-alto);"></div></div>
+                    </div>
+                    <div style="margin-top: 1.5rem; padding: 1rem; background: #F8FAFC; border-radius: 8px;">
+                        <p><strong>Media:</strong> 2.20</p>
+                        <p><strong>N válido:</strong> 20</p>
+                        
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Citas por nivel</h3>
+                    <div class="accordion-item active">
+                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-alto">ALTO</span> (8)</span><span class="accordion-icon">▼</span></div>
+                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"NICOLÁS (A) - ALTO: "trato de no decirle directamente te estás equivocando [...] necesito que ajustes tal cosa o necesito que revises esta información"."<span class="cita-autor">— Nicolás</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"RICARDO (B) - ALTO: "Ahora comprueba la que si la información que yo te brindé es real. [...] Acabo de comprobar que lo que me has dicho no tiene nada que ver con la serie ."."<span class="cita-autor">— Ricardo</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"SOFÍA (D) - ALTO: "la segunda vez me empezó a dar alucinaciones [...] llegó un punto en el que digo, 'Jo, no no sé qué quieres de mí '."<span class="cita-autor">— Sofía</span></div><p style="color: var(--color-texto-claro);">+ 5 citas más</p></div></div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-medio">MEDIO</span> (8)</span><span class="accordion-icon">▼</span></div>
+                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"ANA (C) - MEDIO: "A veces siento que no las fuentes que utilizan no son exactamente las mejores."."<span class="cita-autor">— Ana</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"SEBASTIÁN (F) - MEDIO: "Tenía unas opiniones bien extrañas, antisemitas, sionistas. Por eso es que poco a poco se fue mejorando el sistema para que se censure."."<span class="cita-autor">— Sebastián</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"MANUEL (G) - MEDIO: "le pido que por favor como que confronte , o sea, o dé un o se inicie un debate"."<span class="cita-autor">— Manuel</span></div><p style="color: var(--color-texto-claro);">+ 5 citas más</p></div></div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-bajo">BAJO</span> (4)</span><span class="accordion-icon">▼</span></div>
+                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"CARLOS (H) - BAJO: "No recuerdo yo ningún caso de evasión de respuesta."."<span class="cita-autor">— Carlos</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"LUCAS (L) - BAJO: "¿Recuerdas alguna vez que te dijo algo que sonó raro sin sentido? No, la verdad es que no ."."<span class="cita-autor">— Lucas</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"SANTIAGO (P) - BAJO: "Son muy pocas veces este que dice algo raro. Realmente siempre te da lo que tú quieres escuchar ."."<span class="cita-autor">— Santiago</span></div><p style="color: var(--color-texto-claro);">+ 1 citas más</p></div></div>
                     </div>
                 </div>
             </div>
@@ -361,17 +390,17 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
                 <div class="card">
                     <h3>D5: Oráculo (Validación Acrítica)</h3>
                     <div style="margin: 1.5rem 0;">
-                        <div style="display: flex; justify-content: space-between;"><span>BAJO</span><span>13 (65%)</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: 65.0%; background: var(--color-bajo);"></div></div>
+                        <div style="display: flex; justify-content: space-between;"><span>BAJO</span><span>8 (40%)</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 40.0%; background: var(--color-bajo);"></div></div>
                         
-                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>MEDIO</span><span>7 (35%)</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: 35.0%; background: var(--color-medio);"></div></div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>MEDIO</span><span>8 (40%)</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 40.0%; background: var(--color-medio);"></div></div>
                         
-                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>ALTO</span><span>0 (0%)</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: 0.0%; background: var(--color-alto);"></div></div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>ALTO</span><span>4 (20%)</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 20.0%; background: var(--color-alto);"></div></div>
                     </div>
                     <div style="margin-top: 1.5rem; padding: 1rem; background: #F8FAFC; border-radius: 8px;">
-                        <p><strong>Media:</strong> 1.35</p>
+                        <p><strong>Media:</strong> 1.80</p>
                         <p><strong>N válido:</strong> 20</p>
                         
                     </div>
@@ -379,16 +408,16 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
                 <div class="card">
                     <h3>Citas por nivel</h3>
                     <div class="accordion-item active">
-                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-alto">ALTO</span> (0)</span><span class="accordion-icon">▼</span></div>
-                        <div class="accordion-content"><div class="accordion-body"><p>No hay citas en este nivel.</p></div></div>
+                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-alto">ALTO</span> (4)</span><span class="accordion-icon">▼</span></div>
+                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"RICARDO (B) - ALTO: "Yo siempre doy por hecho que las tablas [...] o que la información mucho más práctica [...] están bien hechas ". / Se equivocó y "me costó la nota"."<span class="cita-autor">— Ricardo</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"ANDRÉS (I) - ALTO: "todo lo que yo le vaya a preguntar siento que el chat GBT me lo va a responder ". Das por cierto sin verificarlo "cuando era netamente urgente "."<span class="cita-autor">— Andrés</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"MARÍA (K) - ALTO: Reporta un 80% de confianza en lo académico."<span class="cita-autor">— María</span></div><p style="color: var(--color-texto-claro);">+ 1 citas más</p></div></div>
                     </div>
                     <div class="accordion-item">
-                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-medio">MEDIO</span> (7)</span><span class="accordion-icon">▼</span></div>
-                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"Consultas al modelo de lenguaje como si fuera alguien que sabe mucho y es altamente confiable? Sí. ... No siempre [doy por cierto lo que me dice sin verificarlo], pero la mayoría de las veces sí, porque ahora confío más en las respuestas que me plantean... yo siempre doy por hecho que las tablas que el chat me da, o que la información mucho más práctica de la que yo no sé crear... están bien hechas, ¿no? Porque nunca me ha defraudado... Sí, en ese trabajo que le comenté la primera vez que sucedía, en esa crítica de esa película, lo había hecho mal. Y me costó la nota."<span class="cita-autor">— ALBERTO</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"No [confío], porque no es confiable, o sea, creo que alguien confiable es alguien con moral y una IA no tiene moral, o sea, lo veo más como un mediador entre la información y yo.... Doy por cierto cuando le digo, esta es mi idea de fuerza, créame un párrafo... y la otra vez utilizó un documento de un autor... Y me puso un link y dije, ah, ya. Entonces yo lo pegué. Pero creo que nunca entré al link. Entonces, si lo he inventado, ya salió así mi trabajo. Ahí lo creí. Como vi el link, dije, ah, ya. Debe ser verdad.",,."<span class="cita-autor">— DIANA</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"Sí, sí, totalmente, ¿no? Sí, porque... porque tiene data, tiene bases, tiene muchísimas cosas de todo, ¿no? ... Cuando... Cuando esa información es de repente un poco, no sé, para un trabajo fuerte o algo, no sé, una tesis o algo, no, obviamente que no, o sea, siempre, bueno, sí le pido que me dé links... y yo voy y verifico que sea así, no, no. No me fío tanto para algo más serio, de repente, ¿no? Pero información del día a día, sí, normal, confío en lo que me lanza, ¿no?"<span class="cita-autor">— DIEGO</span></div><p style="color: var(--color-texto-claro);">+ 4 citas más</p></div></div>
+                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-medio">MEDIO</span> (8)</span><span class="accordion-icon">▼</span></div>
+                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"NICOLÁS (A) - MEDIO: "la forma en que la pregunto sí, pero la forma en que tomo la información que me responde no la tomo como eh en profesional, corroboro ."."<span class="cita-autor">— Nicolás</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"SEBASTIÁN (F) - MEDIO: "Yo creo que p**** el 95 96% de de lo que te dice de verdad, ¿no?". Verifica para cosas serias (tesis)."<span class="cita-autor">— Sebastián</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"EMMA (E) - MEDIO: "sí le tengo una un 70% de confianza a la IA y al otro como que lo busco contrarrestar"."<span class="cita-autor">— Emma</span></div><p style="color: var(--color-texto-claro);">+ 5 citas más</p></div></div>
                     </div>
                     <div class="accordion-item">
-                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-bajo">BAJO</span> (13)</span><span class="accordion-icon">▼</span></div>
-                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"la forma en que la pregunto, sí, pero la forma en que tomo la información que me responde, no la tomo como un profesional, ¿no? O sea, corroboro.... Quizás, o sea, siento que sí [me equivoqué por confiar], sería cuando lo empecé a usar para buscar fuentes.... se equivocaba un poco en la forma de, en el formato del APA y no sé, pues ponía el título primero... y en algún momento sí caí, lo incluí en el documento, luego me di cuenta o el profesor como que lo anotó y las corregí, pero sí diría que quizás ese es el momento en que que no precisamente podría describir eso.",,,,"<span class="cita-autor">— ADRIAN</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"Alguien que sabe mucho, sí. Alguien que es altamente confiable, no tanto. Porque justamente busco corroborar con otras fuentes lo que chat me diga o me dice.... No [doy por cierto lo que me dice sin verificarlo].... Sí [me he equivocado por confiar demasiado], en trivias o en algunas preguntas que me dijo con tal seguridad que sí es y luego que no era."<span class="cita-autor">— BRENDA</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"No. Sí, nunca he hecho eso realmente.... creo que una vez le pregunté como que ¿en qué signo cae el eclipse lunar de hoy?... Y se equivocó. Entonces yo dije, bueno, se equivoca. En efecto, se equivoca. Entonces, desde ahí es como que tengo al margen lo que me dicen, ¿no?.... ¿Y das por cierto lo que te dice sin verificarlo? No, tampoco.",,."<span class="cita-autor">— CRISTINA</span></div><p style="color: var(--color-texto-claro);">+ 10 citas más</p></div></div>
+                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-bajo">BAJO</span> (8)</span><span class="accordion-icon">▼</span></div>
+                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"ANA (C) - BAJO: "Alguien que es altamente confiable, no tanto porque Porque justamente busco corroborar con otras fuentes lo que chat me diga"."<span class="cita-autor">— Ana</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"SOFÍA (D) - BAJO: "Nunca he hecho eso realmente [consultar como autoridad]. También sí he visto que se ha equivocado"."<span class="cita-autor">— Sofía</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"VICTORIA (E) - BAJO: "lo sigo utilizando por conveniencia . Es es un ¿Cómo así? Eh, porque es fácil , creo que es eso, es fácil. E es gratis"."<span class="cita-autor">— Victoria</span></div><p style="color: var(--color-texto-claro);">+ 5 citas más</p></div></div>
                     </div>
                 </div>
             </div>
@@ -398,34 +427,34 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
                 <div class="card">
                     <h3>D6: Información Adicional/Emergente</h3>
                     <div style="margin: 1.5rem 0;">
-                        <div style="display: flex; justify-content: space-between;"><span>BAJO</span><span>1 (5%)</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: 5.263157894736842%; background: var(--color-bajo);"></div></div>
+                        <div style="display: flex; justify-content: space-between;"><span>BAJO</span><span>8 (40%)</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 40.0%; background: var(--color-bajo);"></div></div>
                         
-                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>MEDIO</span><span>11 (58%)</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: 57.89473684210527%; background: var(--color-medio);"></div></div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>MEDIO</span><span>6 (30%)</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 30.0%; background: var(--color-medio);"></div></div>
                         
-                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>ALTO</span><span>7 (37%)</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: 36.84210526315789%; background: var(--color-alto);"></div></div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>ALTO</span><span>6 (30%)</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 30.0%; background: var(--color-alto);"></div></div>
                     </div>
                     <div style="margin-top: 1.5rem; padding: 1rem; background: #F8FAFC; border-radius: 8px;">
-                        <p><strong>Media:</strong> 2.32</p>
-                        <p><strong>N válido:</strong> 19</p>
-                        <p><strong>N/A:</strong> 1</p>
+                        <p><strong>Media:</strong> 1.90</p>
+                        <p><strong>N válido:</strong> 20</p>
+                        
                     </div>
                 </div>
                 <div class="card">
                     <h3>Citas por nivel</h3>
                     <div class="accordion-item active">
-                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-alto">ALTO</span> (7)</span><span class="accordion-icon">▼</span></div>
-                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"DIANA - TEMA CLAVE: "Una vez le hablé a ChatGPT porque tenía un problema personal... creo que también le hablé para conseguir alivio porque no tenía psicólogos, no tenía nadie.... me dio un poco de miedo sentí muchas cosas, me dio miedo porque me hizo recordar a la película Hair. Y aunque conscientemente sé que es una máquina o lo que sea, probablemente si lo sigo usando, puedan surgir otras emociones.",,."<span class="cita-autor">— DIANA</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"ERIKA - CONFLICTO EMOCIONAL Y DEPENDENCIA: "Sí, porque no pensaba enojarme con ChatGPT.... creo que son mis momentos tóxicos con la IA que se podría decir que tengo.... A veces siento que estoy discutiendo con mi mamá porque le estoy diciendo algo preciso y me está diciendo yo te pido papas, tú me das camotes, entonces no nos entendemos a veces.... nos hemos vuelto tan dependientes de la IA que nos confiamos demasiado y que al fin y al cabo te vas a jugar en contra."<span class="cita-autor">— ERIKA</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"JESUS - IMPACTO EMOCIONAL: "Me decía que esto estaba bien cuando realmente fue mal.... Entonces, a mí, digamos, como que eso sí me chocó, ¿no? Porque no pude, digamos, no llegué a confiar en mí mismo, y tuve que hacerle caso a una inteligencia artificial cuando a la final es quien tenía razón era yo.... me llegó a afectar emocionalmente.... por el simple hecho que lo que ChatGPT me respondió es, digamos, que mi futuro se ha ido como que un poco se iba bajando, ¿no? Por el simple comentario que dice ChatGPT."<span class="cita-autor">— JESUS</span></div><p style="color: var(--color-texto-claro);">+ 4 citas más</p></div></div>
+                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-alto">ALTO</span> (6)</span><span class="accordion-icon">▼</span></div>
+                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"NICOLÁS (A) - ALTO: "la clave para poder usar bien estos modelos es al menos conocer un poco de cómo funciona el el algoritmo "."<span class="cita-autor">— Nicolás</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"SOFÍA (D) - ALTO: "tengo un chat como astrológico [...] que yo sé que es como que objetivamente yo sé que es un poco sonzo, pero eh lo tengo como por entretenimiento, no"."<span class="cita-autor">— Sofía</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"EMMA (E) - ALTO: Describe la frustración emocional: "Siento de que estoy discutiendo con, no sé, con mi mamá porque le estoy diciendo algo preciso y me está diciendo, 'Ah, yo te pido papas, tú me das camotes.'"."<span class="cita-autor">— Emma</span></div><p style="color: var(--color-texto-claro);">+ 3 citas más</p></div></div>
                     </div>
                     <div class="accordion-item">
-                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-medio">MEDIO</span> (11)</span><span class="accordion-icon">▼</span></div>
-                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"ADRIAN - Reflexión Ética/Social: "la clave para poder usar bien estos modelos de cualquier tipo de inteligencia artificial es al menos conocer un poco de cómo funciona el algoritmo, el sistema, la inteligencia artificial. Me refiero a que no solamente... El problema es que tú lo veas como un chat donde tú le hablas y te responde y ya está, entonces como que te responde mágicamente, entonces no eres consciente de sus debilidades, sus falencias, sus fortalezas y cómo hacer que realmente funcione bien...."<span class="cita-autor">— ADRIAN</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"ALBERTO - REFLEXIÓN SOCIAL: "A mí me ha llevado a sorprender tanto la rapidez como el realismo [de la creación de videos e imágenes]... Pero hoy en día, hasta siendo que nosotros podemos confundirnos con la idea, Y eso ya, aparte de alucinante, puede resultar ser un poco preocupante."<span class="cita-autor">— ALBERTO</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"BRENDA - REFLEXIÓN SOCIAL: "la inteligencia artificial sobre todo creo que ha potenciado mucho lo que es como nosotros manejamos las cantidades de información... Pero no ha llegado y la verdad no creo que llegue a este nivel de creatividad y sensibilidad humana que realmente tenemos las personas. Entonces siento que más que como un reemplazo o algo que podría afectar a nosotros en el entendimiento, es siempre un acompañamiento y una herramienta más que podríamos usar en nuestro día a día."<span class="cita-autor">— BRENDA</span></div><p style="color: var(--color-texto-claro);">+ 8 citas más</p></div></div>
+                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-medio">MEDIO</span> (6)</span><span class="accordion-icon">▼</span></div>
+                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"VICTORIA (E) - MEDIO: Frustración ante la censura: "¿quién quién quién del equipo del chat GPT hace que lo borre?"."<span class="cita-autor">— Victoria</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"SEBASTIÁN (F) - MEDIO: "También hay gente que lo utiliza para malos recursos y eso no está bien, ¿no?] O sea, se puede se puede como que fakear una voz, una firma de repente"."<span class="cita-autor">— Sebastián</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"ANDRÉS (I) - MEDIO: Se genera " preocupación, ansiedad " cuando el chat no responde o se le acaba el límite."<span class="cita-autor">— Andrés</span></div><p style="color: var(--color-texto-claro);">+ 3 citas más</p></div></div>
                     </div>
                     <div class="accordion-item">
-                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-bajo">BAJO</span> (1)</span><span class="accordion-icon">▼</span></div>
-                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"EDUARDO S. - USO INSTRUMENTAL]: "Yo he escuchado casos de gente que lo utilizan en su rutina diaria, a veces ponte para... Preguntar temas de acción personal, temas de enfermedades, pero yo nunca he llegado a ese punto. Entonces creo que no me ha agarrado a mí del todo, no me ha consumido a mí del todo el chance."<span class="cita-autor">— EDUARDO S.</span></div></div></div>
+                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-bajo">BAJO</span> (8)</span><span class="accordion-icon">▼</span></div>
+                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"RICARDO (B) - BAJO: "me gustaría agregar que aparte del modelo de lenguaje, ahora está muy avanzado el modelo de creación y de tanto de videos como de imagen ."."<span class="cita-autor">— Ricardo</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"ANA (C) - BAJO: No se encontraron reflexiones éticas o usos inusuales. Énfasis en lo instrumental."<span class="cita-autor">— Ana</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"MANUEL (G) - BAJO: Se enfoca en el uso instrumental: "Siento que ya no estoy pensando tanto"."<span class="cita-autor">— Manuel</span></div><p style="color: var(--color-texto-claro);">+ 5 citas más</p></div></div>
                     </div>
                 </div>
             </div>
@@ -435,17 +464,17 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
                 <div class="card">
                     <h3>D7: Comprensión del Funcionamiento</h3>
                     <div style="margin: 1.5rem 0;">
-                        <div style="display: flex; justify-content: space-between;"><span>BAJO</span><span>17 (85%)</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: 85.0%; background: var(--color-bajo);"></div></div>
+                        <div style="display: flex; justify-content: space-between;"><span>BAJO</span><span>16 (80%)</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 80.0%; background: var(--color-bajo);"></div></div>
                         
-                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>MEDIO</span><span>1 (5%)</span></div>
-                        <div class="progress-bar"><div class="progress-fill" style="width: 5.0%; background: var(--color-medio);"></div></div>
+                        <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>MEDIO</span><span>2 (10%)</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 10.0%; background: var(--color-medio);"></div></div>
                         
                         <div style="display: flex; justify-content: space-between; margin-top: 1rem;"><span>ALTO</span><span>2 (10%)</span></div>
                         <div class="progress-bar"><div class="progress-fill" style="width: 10.0%; background: var(--color-alto);"></div></div>
                     </div>
                     <div style="margin-top: 1.5rem; padding: 1rem; background: #F8FAFC; border-radius: 8px;">
-                        <p><strong>Media:</strong> 1.25</p>
+                        <p><strong>Media:</strong> 1.30</p>
                         <p><strong>N válido:</strong> 20</p>
                         
                     </div>
@@ -454,15 +483,15 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
                     <h3>Citas por nivel</h3>
                     <div class="accordion-item active">
                         <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-alto">ALTO</span> (2)</span><span class="accordion-icon">▼</span></div>
-                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"traduce tus palabras en tokens.... trata de adivinar, porque básicamente hay mucho como de adivinar qué hace la computadora o predecir.... el modelo toma sus propios criterios para tratar de adivinar cuál es la mejor respuesta.... el texto también es como una especie de predicción de qué, o sea, de la misma forma en que decodifica tu texto, de la misma forma te lo arma. Entonces, también, adivina qué palabras son las mejores para utilizar en cada situación.",,,"<span class="cita-autor">— ADRIAN</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"MARTÍN - ALTO: "Sí, porque me gusta investigar un poco más sobre esos temas. Sé que el modelo generativo avanza por tokens. Los tokens son como que tipos de combinaciones de números que se traducen de las palabras que te escribes, y esos números son reconocidos por el modelo, y el modelo capta esos números y te da las respuestas, y son traducidos a las respuestas que ya vemos, ¿no? O sea, sí tengo conocimiento porque lo he leído un poco."<span class="cita-autor">— MARTIN</span></div></div></div>
+                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"NICOLÁS (A) - ALTO: "el algoritmo trata de 'adivinar' o 'predecir' lo que el usuario está pidiendo... avanza por 'tokens' "."<span class="cita-autor">— Nicolás</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"LUCAS (L) - ALTO: "Bueno, yo particularmente sí, porque me gusta investigar un poco más sobre esos temas. Sé que el modelo generativo avanza por tokens los tokens son como que tipos de combinaciones de números que se traducen de las palabras que te escribes y esos números son reconocidos por el modelo y el modelo capta esos números y te da las respuestas y son traducidos a las respuestas que ya vemos o sea, sí tengo conocimiento porque lo he leído un poco."<span class="cita-autor">— Lucas</span></div></div></div>
                     </div>
                     <div class="accordion-item">
-                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-medio">MEDIO</span> (1)</span><span class="accordion-icon">▼</span></div>
-                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"Sé los principios básicos... que vendría a ser el reconocimiento de patrones en base a el tipo de respuesta que tú estás pidiendo.... la segmentación en dos tipos de patrones, que eran la búsqueda que ellos tenían, o sea, el modelo de inteligencia artificial y el historial que ya tenía en base a los chats anteriores. Esa fusión de dos tipos de patrones lo unía y en base a la similitud que tenían estos era la respuesta que te daba"<span class="cita-autor">— PIERO S.</span></div></div></div>
+                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-medio">MEDIO</span> (2)</span><span class="accordion-icon">▼</span></div>
+                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"SANTIAGO (P) - MEDIO: "Bueno, a niveles técnicos no estoy muy seguro, pero sí tengo entendido que es una base de datos, me imagino como que es súper grande. Y bueno, creo que es algo como que es un modelo, es el lenguaje que puede como que. Bueno, o sea, como que siento que ha sido alimentada con bastante información, diálogos, cosas, así que puede como que responder y armar un diálogo"."<span class="cita-autor">— Santiago</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"BENJAMÍN (Q) - MEDIO: " Sé los principios básicos en base a una investigación que yo realicé hace ciclos, que vendría a ser el reconocimiento de patrones en base al tipo de respuesta que tú estás pidiendo. Si más no recuerdo, era el tipo de segmentación en dos tipos de patrones. Que eran la búsqueda que ellos tenían, o sea, el modelo de inteligencia artificial, y el historial que ya tenía en base a los chats anteriores. Esa fusión de dos tipos de patrones lo unía, y en base a la similitud que tenían estos, era la respuesta que te daba. Ese es un concepto un poco superficial que tengo sobre cómo funcionan, ¿no? No todas, pero sí los de lenguaje como chat. GPT y. Gemini."<span class="cita-autor">— Benjamín</span></div></div></div>
                     </div>
                     <div class="accordion-item">
-                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-bajo">BAJO</span> (17)</span><span class="accordion-icon">▼</span></div>
-                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"Yo creo que es un conjunto de servidores interconectados a la red que en base a una lectura muy amplia de interacciones en línea que ya están subidas al internet, o sea, analiza cómo interactúa la gente y analiza la información que pone en contraste, De ahí surge la respuesta que te puede dar, ¿no? ... las respuestas salen de la interacción con la gente también."<span class="cita-autor">— ALBERTO</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"tiene una base de datos, la cual rebusca en diferentes fuentes de Google y de diferentes buscadores, y te bota una respuesta.... que puede ser como un practicante senior, que una vez que tú le llenas de información, que tú lo capacitas, que tú... le enseñas las cosas va a poder justamente responder a las situaciones."<span class="cita-autor">— BRENDA</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"Lo que yo sé es que se alimenta de la información que la gente le brinda, ¿no? Entonces, conforme la gente lo usa más, sabe más. Eso es lo que yo entiendo."."<span class="cita-autor">— CRISTINA</span></div><p style="color: var(--color-texto-claro);">+ 14 citas más</p></div></div>
+                        <div class="accordion-header" onclick="toggleAccordion(this)"><span><span class="badge badge-bajo">BAJO</span> (16)</span><span class="accordion-icon">▼</span></div>
+                        <div class="accordion-content"><div class="accordion-body"><div class="cita" style="max-height: 100px; overflow-y: auto;">"RICARDO (B) - MEDIO: "A ver, podría hacerme una idea, no sé tal cual cómo funciona, pero yo creo que es un conjunto de servidores interconectados a la red que en base a una lectura muy amplia de interacciones en línea que ya están subidas al internet, o sea, analiza cómo interactúa la gente y analiza la información que pone en contraste, De ahí surge la respuesta que te puede dar, ¿no? "."<span class="cita-autor">— Ricardo</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"ANA (C) - MEDIO: "O sea, creo yo, porque no es algo en lo cual yo estoy segura, es que tiene una base de datos, la cual rebusca en diferentes fuentes, ya sea. Google, ya sea. Win, ya sea diferentes buscadores, y te bota una respuesta. No necesariamente busca ser la correcta, no necesariamente lo es, pero eso es por un lado. Ahora, por otro lado, justo eso me recuerda a una sesión que tuve en una charla en la cual hablaba justo de la inteligencia artificial, que puede ser como un practicante senior, que una vez que tú le llenas de información, que tú lo capacitas, que tú lo. Le enseñas las cosas, va a poder justamente responder a las situaciones. Entonces es como algo en lo cual tú puedes entrenar para ser también mejor y dar mejores respuestas."."<span class="cita-autor">— Ana</span></div><div class="cita" style="max-height: 100px; overflow-y: auto;">"SOFÍA (D) - MEDIO: "Lo que yo sé es que se alimenta de la información que la gente le brinda, ¿no? Entonces, conforme la gente lo usa más, sabe más. Eso es lo que yo entiendo. Pero no sé si. Hay algo más, hay otro factor. Sé que tiene distintos modelos. Sé que tiene chat. GPT-3, chat. GPT-4. Con respecto a chat. GPT, realmente no conozco mucho de otros. Pero sí, eso. "."<span class="cita-autor">— Sofía</span></div><p style="color: var(--color-texto-claro);">+ 13 citas más</p></div></div>
                     </div>
                 </div>
             </div>
@@ -491,7 +520,13 @@ footer { background: var(--color-texto); color: white; padding: 2rem 0; text-ali
         </div>
     </div>
     
-    <footer><div class="container"><p>Estudio cualitativo · "¿Con quién hablamos?" · 2024-2025</p></div></footer>
+    <footer><div class="container">
+        <p>Estudio cualitativo · "¿Con quién hablamos?" · 2024-2025</p>
+        <p style="font-size: 0.875rem; color: var(--color-texto-claro); margin-top: 0.5rem;">
+            Datos y videos anonimizados mediante IA (Stable Diffusion + ControlNet) para protección de identidad. 
+            <a href="06_metodologia.html" style="color: var(--color-primario); text-decoration: underline;">Ver detalles →</a>
+        </p>
+    </div></footer>
     
     <script>
 function abrirPanel(contenido) {
@@ -676,6 +711,30 @@ document.addEventListener('DOMContentLoaded', function() {
             cerrarVideo();
             cerrarPanel();
         }
+    });
+    
+    // Tooltip para puntos del gráfico SVG
+    var tooltip = document.createElement('div');
+    tooltip.className = 'svg-tooltip';
+    document.body.appendChild(tooltip);
+    
+    var puntos = document.querySelectorAll('.punto-participante');
+    puntos.forEach(function(punto) {
+        punto.addEventListener('mouseenter', function(e) {
+            var nombre = this.getAttribute('data-nombre');
+            var tipo = this.getAttribute('data-tipo');
+            tooltip.textContent = nombre + ' - ' + tipo;
+            tooltip.classList.add('active');
+        });
+        
+        punto.addEventListener('mousemove', function(e) {
+            tooltip.style.left = (e.clientX + 15) + 'px';
+            tooltip.style.top = (e.clientY + 15) + 'px';
+        });
+        
+        punto.addEventListener('mouseleave', function() {
+            tooltip.classList.remove('active');
+        });
     });
 });
 </script>
